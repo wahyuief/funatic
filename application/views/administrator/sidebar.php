@@ -32,6 +32,18 @@
                         <p>Blog</p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="<?php echo base_url('administrator/products') ?>" class="nav-link <?php if ($this->uri->segment(2) === 'products') echo 'active'; ?>">
+                        <i class="nav-icon fas fa-box"></i>
+                        <p>Products</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?php echo base_url('administrator/orders') ?>" class="nav-link <?php if ($this->uri->segment(2) === 'orders') echo 'active'; ?>">
+                        <i class="nav-icon fas fa-cart-shopping"></i>
+                        <p>Orders</p>
+                    </a>
+                </li>
 
                 <li class="nav-header text-sm">ADMINISTRATOR</li>
                 <li class="nav-item">

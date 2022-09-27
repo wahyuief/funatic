@@ -10,10 +10,15 @@ class FrontendController extends MY_Controller
         $CI =& get_instance();
     }
 
-    protected function _render_page($view, $data = NULL, $returnhtml = FALSE) {
+    protected function _render_page($view, $data) {
 		$data['title'] = $this->config->item('site_title', 'ion_auth') . ($this->uri->segment(2) ? ' | ' . ucwords($this->uri->segment(2)) : '') . ($this->uri->segment(3) ?  ' - ' .ucwords($this->uri->segment(3)) : '');
-		$viewdata = (empty($data)) ? $this->data : $data;
-		$view_html = $this->load->view($view, $viewdata, $returnhtml);
-		if ($returnhtml) return $view_html;
+		$this->load->view('home/header', $data);
+		$this->load->view('home/navbar', $data);
+		$this->load->view('home/sidebar', $data);
+		$this->load->view('home/breadcrumb', $data);
+		$this->load->view($view, $data);
+		$this->load->view('home/footer-widget', $data);
+		$this->load->view('home/footer-copyright', $data);
+		$this->load->view('home/footer', $data);
 	}
 }

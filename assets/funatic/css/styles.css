@@ -1,0 +1,116 @@
+body {
+    background: url(http://skywarriorthemes.com/orizon/red/images/top_light.jpg) no-repeat center top;
+}
+
+.container-md {
+    margin-bottom: 1rem;
+}
+
+.main-wrapper {
+    margin-top: 2rem;
+}
+
+.site-name {
+    margin-top: 2rem;
+}
+
+.bg-red-black {
+    background: rgb(163,11,11);
+    background: linear-gradient(180deg, rgba(163,11,11,1) 0%, rgba(103,8,8,1) 90%, rgba(43,3,3,1) 100%);
+    border-top-style: solid;
+    border-top-color: red;
+}
+.border-top-red {
+    border-top-style: solid;
+    border-top-color: red;
+}
+.carousel-indicators [data-bs-target] {
+    background-color: red;
+}
+.text-red {
+    color: red;
+}
+.bg-semiblack {
+    background-color: #111111;
+}
+h2.widget {
+    font-size: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+h3.widget {
+    font-size: 17px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+.social-icon {
+    width: 20px;
+    text-align: center;
+    margin-right: 5px;
+    color: red;
+}
+@media only screen and (max-width: 2000px) {
+    .container-md {
+        max-width: 70%;
+    }
+    .carousel-inner, .carousel-item {
+        height: 25rem;
+    }
+    .footer-border-right-red {
+        border-right-style: solid;
+        border-right-color: red;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    .container-md {
+        max-width: 75%;
+    }
+    .carousel-inner, .carousel-item {
+        height: 20rem;
+    }
+}
+
+@media only screen and (max-width: 992px) {
+    .container-md {
+        max-width: 85%;
+    }
+    .navbar-toggler {
+        text-align-last: justify;
+        color: white;
+    }
+    .navbar-toggler-icon {
+        color: white;
+    }
+    .navbar-toggler:focus {
+        outline: none!important;
+        box-shadow: none!important;
+    }
+    .menu-text-toggle {
+        line-height: 2;
+        vertical-align: middle;
+        display: inline-block;
+    }
+    .carousel-inner, .carousel-item {
+        height: 20rem;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .container-md {
+        max-width: 100%;
+    }
+    .carousel-inner, .carousel-item {
+        height: 18rem;
+    }
+    .footer-border-right-red {
+        border-right: 0;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .carousel-inner, .carousel-item {
+        height: 12rem;
+    }
+}
