@@ -4,6 +4,7 @@ class Home extends FrontendController {
 
 	public function index()
 	{
+		// echo(pricelist());die;
 		$this->data['message'] = $this->_show_message();
 		$this->_render_page('home', $this->data);
 	}

@@ -16,7 +16,8 @@
 		"yidas/pagination": "^1.0",
 		"phpoffice/phpspreadsheet": "^1.23",
 		"fpdf/fpdf": "^1.84",
-		"hashids/hashids": "^4.1"
+		"hashids/hashids": "^4.1",
+		"pear/http_request2": "^2.5"
 	},
 	"require-dev": {
 		"mikey179/vfsstream": "1.1.*"

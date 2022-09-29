@@ -7,19 +7,19 @@
         <div class="collapse navbar-collapse" id="menuFunatic">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-home"></i> Home</a>
+                    <a class="nav-link" href="<?php echo base_url(); ?>"><i class="fas fa-home"></i> Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-file-invoice-dollar"></i> Invoice</a>
+                    <a class="nav-link" href="<?php echo base_url('invoice'); ?>"><i class="fas fa-file-invoice-dollar"></i> Invoice</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-newspaper"></i> Blog</a>
+                    <a class="nav-link" href="<?php echo base_url('blog'); ?>"><i class="fas fa-newspaper"></i> Blog</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-envelope"></i> Contact</a>
+                    <a class="nav-link" href="<?php echo base_url('contact'); ?>"><i class="fas fa-envelope"></i> Contact</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-cog"></i> Tools</a>
+                    <a class="nav-link" href="<?php echo base_url(); ?>"><i class="fas fa-cog"></i> Tools</a>
                 </li>
             </ul>
         </div>

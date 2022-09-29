@@ -12,6 +12,8 @@
                                           </div>
                                     </div>
                                     <textarea name="content" id="content" required hidden><?php echo $this->form_validation->set_value('content'); ?></textarea>
+                                    <div id="fb-customfield"></div>
+                                    <textarea name="customfield" id="customfield" hidden><?php echo $this->form_validation->set_value('custom_field'); ?></textarea>
                               </div>
                         </div>
                   </div>
@@ -24,7 +26,7 @@
                                     </div>
                                     <div class="mb-3">
                                           <label for="category">Category</label>
-                                          <input type="text" name="category" id="category" value="<?php echo $this->form_validation->set_value('category'); ?>" class="form-control">
+                                          <input type="text" name="category" id="category" value="<?php echo $this->form_validation->set_value('category'); ?>" class="form-control" required>
                                     </div>
                                     <label for="featured_image">Featured Image</label>
                                     <div class="mb-3 input-group">
@@ -33,15 +35,8 @@
                                                 <div class="input-group-text"><i class="fas fa-image"></i></div>
                                           </div>
                                     </div>
-                                    <label for="meta_title">Meta Title</label>
-                                    <div class="mb-3">
-                                          <input type="text" name="meta_title" id="meta_title" value="<?php echo $this->form_validation->set_value('meta_title'); ?>" class="form-control">
-                                          <div class="text-sm text-muted"><span id="count_metatitle">0</span> characters. The ideal length for the meta title is 50-60 characters.</div>
-                                    </div>
-                                    <label for="meta_description">Meta Description</label>
-                                    <div class="mb-3">
-                                          <textarea name="meta_description" id="meta_description" value="<?php echo $this->form_validation->set_value('meta_description'); ?>" class="form-control"></textarea>
-                                          <div class="text-sm text-muted"><span id="count_metadesc">0</span> characters. The ideal length for the meta description is 155-160 characters.</div>
+                                    <div id="divpreview" class="mb-2">
+                                          <img src="<?php echo ($data->featured_image ? base_url('uploads/' . $data->featured_image) : '#') ?>" alt="preview" id="preview" class="img-thumbnail">
                                     </div>
                               </div>
                         </div>
@@ -51,23 +46,33 @@
       </div>
 </div>
 <script>
+      <?php if(empty($data->featured_image)): ?>divpreview.style.display = 'none';<?php endif; ?>
+      featured_image.onchange = evt => {
+            const [file] = featured_image.files
+            if (file) {
+                  divpreview.style.display = 'block';
+                  preview.src = URL.createObjectURL(file)
+            }
+      }
       $(document).ready(function() {
             $('#content').summernote({
                   placeholder: 'Tulis konten disini..',
                   height: 400
             });
       });
-      var meta_title = document.getElementById('meta_title');
-      var title = document.getElementById('title');
-      title.addEventListener('focusout', function(){
-            document.getElementById('meta_title').value = title.value + ' - ' + site_name;
-            document.getElementById('count_metatitle').textContent = meta_title.value.length;
-      })
-      meta_title.addEventListener('keyup', function(){
-            document.getElementById('count_metatitle').textContent = meta_title.value.length;
-      })
-      var meta_description = document.getElementById('meta_description');
-      meta_description.addEventListener('keyup', function(){
-            document.getElementById('count_metadesc').textContent = meta_description.value.length;
-      })
+
+      var options = {
+            roles: false,
+            controlPosition: 'left',
+            disableFields: ['autocomplete', 'button', 'file', 'textarea'],
+            disabledAttrs: ['access'],
+            disabledActionButtons: ['data'],
+            onSave: function(evt, formData) {
+                  console.log(evt, formData)
+                  document.getElementById('customfield').textContent = formData
+                  var notyf = new Notyf({position: {x:'right',y:'top'},dismissible:true});
+                  notyf.success({message: "Custom Field Tersimpan!", duration:5000})
+            }
+      };
+      $(document.getElementById('fb-customfield')).formBuilder(options);
 </script>

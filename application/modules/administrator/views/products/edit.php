@@ -12,6 +12,8 @@
                                           </div>
                                     </div>
                                     <textarea name="content" id="content" required hidden><?php echo $this->form_validation->set_value('content', $data->content); ?></textarea>
+                                    <div id="fb-customfield"></div>
+                                    <textarea name="customfield" id="customfield" hidden><?php echo $this->form_validation->set_value('custom_field', $data->custom_field); ?></textarea>
                               </div>
                         </div>
                   </div>
@@ -26,7 +28,7 @@
                                     </div>
                                     <div class="mb-3">
                                           <label for="category">Category</label>
-                                          <input type="text" name="category" id="category" value="<?php echo $this->form_validation->set_value('category', $data->category); ?>" class="form-control">
+                                          <input type="text" name="category" id="category" value="<?php echo $this->form_validation->set_value('category', $data->category); ?>" class="form-control" required>
                                     </div>
                                     <label for="featured_image">Featured Image</label>
                                     <div class="mb-3 input-group">
@@ -35,15 +37,30 @@
                                                 <div class="input-group-text"><i class="fas fa-image"></i></div>
                                           </div>
                                     </div>
-                                    <label for="meta_title">Meta Title</label>
-                                    <div class="mb-3">
-                                          <input type="text" name="meta_title" id="meta_title" value="<?php echo $this->form_validation->set_value('meta_title', $data->meta_title); ?>" class="form-control">
-                                          <div class="text-sm text-muted"><span id="count_metatitle">0</span> characters. The ideal length for the meta title is 50-60 characters.</div>
+                                    <div id="divpreview" class="mb-2">
+                                          <img src="<?php echo ($data->featured_image ? base_url('uploads/' . $data->featured_image) : '#') ?>" alt="preview" id="preview" class="img-thumbnail">
                                     </div>
-                                    <label for="meta_description">Meta Description</label>
+                                    <h5 class="text-bold">Settings</h5>
                                     <div class="mb-3">
-                                          <textarea name="meta_description" id="meta_description" value="<?php echo $this->form_validation->set_value('meta_description', $data->meta_description); ?>" class="form-control"></textarea>
-                                          <div class="text-sm text-muted"><span id="count_metadesc">0</span> characters. The ideal length for the meta description is 155-160 characters.</div>
+                                          <label for="quantity_active" class="font-weight-normal">
+                                                <input type="checkbox" name="quantity_active" id="quantity_active" <?php echo ($data->quantity_active ? 'checked' : '') ?> value="<?php echo $this->form_validation->set_value('quantity_active', 1); ?>"> Activate purchase using quantity
+                                          </label>
+                                    </div>
+                                    <div id="quantity_name_field" class="mb-3">
+                                          <label for="quantity_name">Quantity Name</label>
+                                          <input type="text" name="quantity_name" id="quantity_name" value="<?php echo $this->form_validation->set_value('quantity_name', $data->quantity_name); ?>" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                          <label for="customer_id_field">Customer ID Field</label>
+                                          <select name="customer_id_field" id="customer_id_field" class="form-control" <?php echo ($data->custom_field ? 'required' : '') ?>>
+                                                <option value="" disabled selected>Select Customer ID Field</option>
+                                                <?php
+                                                      foreach (json_decode($data->custom_field) as $field) {
+                                                            echo '<option '.($field->name === $data->customer_id_field ? 'selected' : '').' value="'.$field->name.'">'.$field->label.' ('.$field->name.')</option>';
+                                                      }
+                                                ?>
+                                          </select>
+                                          <small>This option is from custom field</small>
                                     </div>
                               </div>
                         </div>
@@ -53,23 +70,45 @@
       </div>
 </div>
 <script>
+      <?php if(empty($data->featured_image)): ?>divpreview.style.display = 'none';<?php endif; ?>
+      featured_image.onchange = evt => {
+            const [file] = featured_image.files
+            if (file) {
+                  divpreview.style.display = 'block';
+                  preview.src = URL.createObjectURL(file)
+            }
+      }
       $(document).ready(function() {
             $('#content').summernote({
                   placeholder: 'Tulis konten disini..',
                   height: 400
             });
       });
-      var meta_title = document.getElementById('meta_title');
-      var title = document.getElementById('title');
-      title.addEventListener('focusout', function(){
-            document.getElementById('meta_title').value = title.value + ' - ' + site_name;
-            document.getElementById('count_metatitle').textContent = meta_title.value.length;
-      })
-      meta_title.addEventListener('keyup', function(){
-            document.getElementById('count_metatitle').textContent = meta_title.value.length;
-      })
-      var meta_description = document.getElementById('meta_description');
-      meta_description.addEventListener('keyup', function(){
-            document.getElementById('count_metadesc').textContent = meta_description.value.length;
-      })
+
+      var options = {
+            roles: false,
+            controlPosition: 'left',
+            disableFields: ['autocomplete', 'button', 'file', 'textarea'],
+            disabledAttrs: ['access'],
+            disabledActionButtons: ['data'],
+            formData: '<?php echo $this->form_validation->set_value('custom_field', $data->custom_field); ?>',
+            onSave: function(evt, formData) {
+                  console.log(evt, formData)
+                  document.getElementById('customfield').textContent = formData
+                  var notyf = new Notyf({position: {x:'right',y:'top'},dismissible:true});
+                  notyf.success({message: "Custom Field Tersimpan!", duration:5000})
+            }
+      };
+      $(document.getElementById('fb-customfield')).formBuilder(options);
+
+      <?php echo ($data->quantity_active ? '' : "$('#quantity_name_field').hide();") ?>
+      $('#quantity_active').change(function () {
+      if (!this.checked) {
+            $('#quantity_name').removeAttr('required');
+            $('#quantity_name_field').hide();
+      } else {
+            $('#quantity_name').attr('required', true);
+            $('#quantity_name_field').show();
+      }
+    });
 </script>

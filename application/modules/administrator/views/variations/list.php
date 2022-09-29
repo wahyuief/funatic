@@ -3,12 +3,12 @@
         <div class="card card-<?php echo get_option('accent_color') ?> card-outline">
           <div class="card-header">
               <div class="card-title">
-                <a href="<?php echo base_url('administrator/products/add'); ?>" class="btn btn-sm btn-<?php echo get_option('accent_color') ?>"><i class="fas fa-plus"></i> Add New</a>
+                <a href="<?php echo base_url('administrator/variations/add?id='.wah_encode(wah_decode(input_get('id')))); ?>" class="btn btn-sm btn-<?php echo get_option('accent_color') ?>"><i class="fas fa-plus"></i> Add New</a>
                   <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-<?php echo get_option('accent_color') ?> dropdown-toggle" data-toggle="dropdown" aria-expanded="false">Export</button>
                     <div class="dropdown-menu" role="menu" style="">
-                      <a class="dropdown-item" href="<?php echo base_url('administrator/products/export_pdf'); ?>">PDF</a>
-                      <a class="dropdown-item" href="<?php echo base_url('administrator/products/export_excel'); ?>">Excel</a>
+                      <a class="dropdown-item" href="<?php echo base_url('administrator/variations/export_pdf?id='.input_get('id')); ?>">PDF</a>
+                      <a class="dropdown-item" href="<?php echo base_url('administrator/variations/export_excel?id='.input_get('id')); ?>">Excel</a>
                     </div>
                   </div>
               </div>
@@ -31,10 +31,10 @@
               <thead>
                   <tr>
                       <th width="5">#</th>
-                      <th>Product Name</th>
-                      <th width="150">Category</th>
-                      <th style="text-align:center;" width="150">Variations</th>
-                      <th style="text-align:center;" width="150">Published</th>
+                      <th width="150">Code</th>
+                      <th>Name</th>
+                      <th width="150">Price</th>
+                      <th width="150">Price+</th>
                       <th style="text-align:center;" width="150">Created</th>
                       <th width="100" class="text-center">Action</th>
                   </tr>
@@ -43,17 +43,17 @@
                   <?php if(!empty($data)): $i=1;foreach ($data as $row): ?>
                   <tr>
                       <td><?php echo $i++; ?></td>
-                      <td><?php echo $row->title; ?></td>
-                      <td><?php echo $row->category; ?></td>
-                      <td style="text-align:center;"><a href="<?php echo base_url('administrator/variations/?id=' . wah_encode($row->id)) ?>"><?php echo $row->variation_count; ?> variation</a></td>
-                      <td style="text-align:center;"><?php echo ($row->published === '1' ? '<span class="badge badge-success">Yes</span>' : '<span class="badge badge-danger">No</span>'); ?></td>
+                      <td><?php echo $row->variation_code; ?></td>
+                      <td><?php echo $row->variation_name; ?></td>
+                      <td><?php echo rupiah($row->variation_price); ?></td>
+                      <td><?php echo rupiah($row->additional_price); ?></td>
                       <td style="text-align:center;"><?php echo date('d-M-Y, H:i', strtotime($row->created_at)); ?></td>
                       <td class="text-center">
                         <div class="btn-group">
                           <a href="#" class="text-lg text-dark" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis"></i></a>
                           <div class="dropdown-menu" role="menu" style="">
-                            <a class="dropdown-item" href="<?php echo base_url('administrator/products/edit/' . wah_encode($row->id)); ?>">Edit</a>
-                            <a class="dropdown-item" data-toggle="confirmation" data-title="Are you sure want to delete?"  data-placement="left" href="<?php echo base_url('administrator/products/delete/' . wah_encode($row->id)); ?>">Delete</a>
+                            <a class="dropdown-item" href="<?php echo base_url('administrator/variations/edit/' . wah_encode($row->id)); ?>">Edit</a>
+                            <a class="dropdown-item" data-toggle="confirmation" data-title="Are you sure want to delete?"  data-placement="left" href="<?php echo base_url('administrator/variations/delete/' . wah_encode($row->id)); ?>">Delete</a>
                           </div>
                         </div>
                       </td>

@@ -12,16 +12,16 @@ class MY_Controller extends MX_Controller
     }
 
     protected function _get_csrf_nonce() {
-		$key = unique_id('uuid');
+		$key = 'funatic_csrf';
 		$value = wah_encode(unique_id(false, 8));
-		$this->session->set_userdata('x_input_csrf_key', $key);
-		$this->session->set_userdata('x_input_csrf_val', $value);
+		$this->session->set_userdata('funatic_csrf_key', $key);
+		$this->session->set_userdata('funatic_csrf_val', $value);
 		return [$key => $value];
 	}
 
 	protected function _valid_csrf_nonce() {
-		$csrfkey = input_post($this->session->userdata('x_input_csrf_key'));
-		if (!$csrfkey && $csrfkey !== $this->session->userdata('x_input_csrf_val')) return FALSE;
+		$csrfkey = input_post($this->session->userdata('funatic_csrf_key'));
+		if (!$csrfkey && $csrfkey !== $this->session->userdata('funatic_csrf_val')) return FALSE;
 		return TRUE;
 	}
 

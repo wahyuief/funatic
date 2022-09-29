@@ -1,8 +1,7 @@
 <aside class="main-sidebar sidebar-dark-<?php echo get_option('accent_color') ?> elevation-4">
     <!-- Brand Logo -->
     <a href="<?php echo base_url(); ?>" class="brand-link">
-        <img src="<?php echo base_url('assets/backend/img/AdminLTELogo.png'); ?>" alt="<?php echo get_option('site_name'); ?> Logo" class="brand-image img-circle elevation-3"
-            style="opacity: .8">
+        <img src="<?php echo base_url('assets/funatic/images/icon.png'); ?>" alt="<?php echo get_option('site_name'); ?> Logo" class="brand-image rounded elevation-3 bg-secondary">
         <span class="brand-text font-weight-light"><?php echo get_option('site_name'); ?></span>
     </a>
 

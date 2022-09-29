@@ -24,6 +24,8 @@
     </style>
     <script src="<?php echo base_url('assets/backend/plugins/jquery/jquery.min.js') ?>"></script>
     <script src="<?php echo base_url('assets/backend/plugins/summernote/summernote-bs4.min.js') ?>"></script>
+    <script src="<?php echo base_url('assets/backend/js/form-builder.min.js') ?>"></script>
+    <script src="<?php echo base_url('assets/backend/js/jquery-ui.min.js') ?>"></script>
     <script>
         var base_url = '<?php echo base_url(); ?>';
         var site_name = '<?php echo get_option('site_name'); ?>';

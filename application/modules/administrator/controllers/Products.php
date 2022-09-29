@@ -12,6 +12,7 @@ class Products extends BackendController {
 		if (!$this->ion_auth->logged_in()) redirect(base_url('auth/login'), 'refresh');
 		if (!$this->ion_auth->is_admin()) show_error('Sorry you do not have permission to access this page');
 		$this->load->model('products_model');
+		$this->load->model('variations_model');
     }
 
 	public function index()
@@ -24,7 +25,13 @@ class Products extends BackendController {
 		]);
 		$this->data['start'] = ($this->data['total'] > 0 ? $this->data['pagination']->offset+1 : 0);
 		$this->data['end'] = ($this->data['total'] > 0 ? $this->data['pagination']->offset+$this->products_model->get(false, $this->data['pagination']->limit, $this->data['pagination']->offset, input_get('q'))->num_rows() : 0);
-		$this->data['data'] = $this->products_model->get(false, $this->data['pagination']->limit, $this->data['pagination']->offset, input_get('q'))->result();
+		$products = $this->products_model->get(false, $this->data['pagination']->limit, $this->data['pagination']->offset, input_get('q'))->result();
+		$data = array();
+		foreach ($products as $product) {
+			$product->variation_count = $this->variations_model->get(['product_id' => $product->id])->num_rows();
+			$data[] = $product;
+		}
+		$this->data['data'] = $data;
 		$this->data['message'] = $this->_show_message();
 
 		$this->_render_page('products/list', $this->data);
@@ -34,6 +41,7 @@ class Products extends BackendController {
 	{
 		$this->form_validation->set_rules('title', 'title', 'trim|required');
 		$this->form_validation->set_rules('content', 'content', 'trim|required');
+		$this->form_validation->set_rules('category', 'category', 'trim|required');
 
 		if ($this->form_validation->run() === FALSE) {
 			$this->data['csrf'] = $this->_get_csrf_nonce();
@@ -44,26 +52,40 @@ class Products extends BackendController {
 
 			$user = $this->ion_auth->user()->row();
 			$input = array(
-				'author_id' => $user->id,
 				'title' => input_post('title'),
 				'slug' => url_title(input_post('title'), 'dash', true),
 				'content' => $this->input->post('content'),
 				'category' => input_post('category'),
-				'tags' => ($this->input->post('tags') ? implode(', ', $this->input->post('tags')) : ''),
-				'meta_title' => (input_post('meta_title') ? input_post('meta_title') : input_post('title')),
-				'meta_description' => (input_post('meta_description') ? input_post('meta_description') : wordwrap(input_post('content'), 30)),
+				'custom_field' => ($this->input->post('customfield') ? $this->input->post('customfield') : NULL),
 			);
+
+			if (isset($_FILES['featured_image'])) {
+				$config['upload_path']		= './uploads/';
+				$config['allowed_types']	= 'jpeg|jpg|png';
+				$config['max_size']			= 2048;
+				$config['file_ext_tolower']	= true;
+				$config['encrypt_name']		= true;
+	
+				$this->load->library('upload', $config);
+				$this->upload->initialize($config);
+	
+				if ($this->upload->do_upload('featured_image')) {
+					$input['featured_image'] = $this->upload->data('file_name');
+				} else {
+					$this->_set_message('error', 'Maximum image size is 2mb.');
+				}
+			}
 
 			if (input_post('submit') === 'publish') {
 				$input['published'] = 1;
 				$input['published_at'] = date('Y-m-d H:i:s');
 			}
 
-			if ($this->products_model->add($input)) {
-				$this->_set_message('success', 'This article has been published successfully.');
-				redirect(base_url('administrator/products'), 'refresh');
+			if ($id = $this->products_model->add($input)) {
+				$this->_set_message('success', 'This product has been saved successfully.');
+				redirect(base_url('administrator/products/edit/' . wah_encode($id)), 'refresh');
 			} else {
-				$this->_set_message('error', 'Failed to create new article.');
+				$this->_set_message('error', 'Failed to create new product.');
 				redirect(base_url('administrator/products/add'), 'refresh');
 			}
 		}
@@ -76,6 +98,9 @@ class Products extends BackendController {
 
 		$this->form_validation->set_rules('title', 'title', 'trim|required');
 		$this->form_validation->set_rules('content', 'content', 'trim|required');
+		$this->form_validation->set_rules('category', 'category', 'trim|required');
+		if ($data->custom_field) $this->form_validation->set_rules('customer_id_field', 'customer_id_field', 'trim|required');
+		if (input_post('quantity_active')) $this->form_validation->set_rules('quantity_name', 'quantity_name', 'trim|required');
 
 		if ($this->form_validation->run() === FALSE) {
 			$this->data['csrf'] = $this->_get_csrf_nonce();
@@ -90,10 +115,28 @@ class Products extends BackendController {
 				'slug' => url_title(input_post('title'), 'dash', true),
 				'content' => $this->input->post('content'),
 				'category' => input_post('category'),
-				'tags' => ($this->input->post('tags') ? implode(', ', $this->input->post('tags')) : ''),
-				'meta_title' => (input_post('meta_title') ? input_post('meta_title') : input_post('title')),
-				'meta_description' => (input_post('meta_description') ? input_post('meta_description') : wordwrap(input_post('content'), 30)),
+				'quantity_active' => (input_post('quantity_active') ? input_post('quantity_active') : 0),
+				'quantity_name' => input_post('quantity_name'),
+				'customer_id_field' => input_post('customer_id_field'),
+				'custom_field' => ($this->input->post('customfield') ? $this->input->post('customfield') : NULL),
 			);
+
+			if (isset($_FILES['featured_image'])) {
+				$config['upload_path']		= './uploads/';
+				$config['allowed_types']	= 'jpeg|jpg|png';
+				$config['max_size']			= 2048;
+				$config['file_ext_tolower']	= true;
+				$config['encrypt_name']		= true;
+	
+				$this->load->library('upload', $config);
+				$this->upload->initialize($config);
+	
+				if ($this->upload->do_upload('featured_image')) {
+					$input['featured_image'] = $this->upload->data('file_name');
+				} else {
+					$this->_set_message('error', 'Maximum image size is 2mb.');
+				}
+			}
 
 			if (input_post('submit') === 'publish') {
 				$input['published'] = 1;
@@ -105,9 +148,9 @@ class Products extends BackendController {
 			$input['updated_at'] = date('Y-m-d H:i:s');
 
 			if ($this->products_model->set($input, ['products.id' => $data->row()->id])) {
-				$this->_set_message('success', 'This article has been updated successfully.');
+				$this->_set_message('success', 'This product has been updated successfully.');
 			} else {
-				$this->_set_message('error', 'Failed to update article.');
+				$this->_set_message('error', 'Failed to update product.');
 			}
 			redirect(base_url('administrator/products/edit/' . $id), 'refresh');
 		}
@@ -119,9 +162,9 @@ class Products extends BackendController {
 		if (!$data->num_rows()) redirect(base_url('administrator/products'), 'refresh');
 
 		if ($this->products_model->unset(['products.id' => $data->row()->id])) {
-			$this->_set_message('success', 'This article has been deleted successfully.');
+			$this->_set_message('success', 'This product has been deleted successfully.');
 		} else {
-			$this->_set_message('error', 'Failed to delete article.');
+			$this->_set_message('error', 'Failed to delete product.');
 		}
 		redirect(base_url('administrator/products'), 'refresh');
 	}

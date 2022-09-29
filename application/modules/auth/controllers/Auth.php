@@ -27,8 +27,8 @@ class Auth extends FrontendController
 		if ($this->form_validation->run() === FALSE) {
 			$this->data['csrf'] = $this->_get_csrf_nonce();
 			$this->data['message'] = $this->_show_message('error', validation_errors());
-			$this->data['page'] = 'login';
-			$this->_render_page('layout', $this->data);
+			$this->data['jsauth'] = 'jsauth';
+			$this->_render_page('login', $this->data);
 		} else {
 			if ($this->_valid_csrf_nonce() === FALSE) show_error($this->lang->line('error_csrf'));
 			if ($this->ion_auth->login(input_post('email'), input_post('password'), (bool)input_post('remember'))) {
@@ -42,37 +42,6 @@ class Auth extends FrontendController
 		}
 	}
 
-	public function register()
-	{
-		$this->data['title'] = 'Register new account';
-		$tables = $this->config->item('tables', 'ion_auth');
-
-		$this->form_validation->set_rules('email', 'email address', 'trim|required|valid_email|is_unique[' . $tables['users'] . '.email]');
-		$this->form_validation->set_rules('password', 'password', 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|matches[password_confirm]');
-		$this->form_validation->set_rules('password_confirm', 'confirm password', 'required|matches[password]');
-		$this->form_validation->set_rules('terms', 'terms', 'trim|required');
-
-		if ($this->form_validation->run() === FALSE) {
-			$this->data['csrf'] = $this->_get_csrf_nonce();
-			$this->data['message'] = ($this->ion_auth->errors() ? $this->_show_message('error', $this->ion_auth->errors()) : $this->_show_message('error', validation_errors()));
-			$this->data['page'] = 'register';
-			$this->_render_page('layout', $this->data);
-		} else {
-			if ($this->_valid_csrf_nonce() === FALSE) show_error($this->lang->line('error_csrf'));
-			$email = strtolower(input_post('email'));
-			$password = input_post('password');
-			$additional_data = [
-				'username' => strstr($email, '@', true),
-				'uuid' => unique_id('uuid')
-			];
-
-			if ($this->ion_auth->register($email, $password, $email, $additional_data)) {
-				$this->_set_message('success', $this->ion_auth->messages());
-				redirect(base_url('auth/register'), 'refresh');
-			}
-		}
-	}
-
 	public function forgot_password()
 	{
 		$this->data['title'] = $this->lang->line('forgot_password_heading');
@@ -81,8 +50,8 @@ class Auth extends FrontendController
 		if ($this->form_validation->run() === FALSE) {
 			$this->data['csrf'] = $this->_get_csrf_nonce();
 			$this->data['message'] = $this->_show_message('error', validation_errors());
-			$this->data['page'] = 'forgot_password';
-			$this->_render_page('layout', $this->data);
+			$this->data['jsauth'] = 'jsauth';
+			$this->_render_page('forgot_password', $this->data);
 		} else {
 			if ($this->_valid_csrf_nonce() === FALSE) show_error($this->lang->line('error_csrf'));
 			$identity = $this->ion_auth->where('email', input_post('email'))->users()->row();
@@ -127,8 +96,8 @@ class Auth extends FrontendController
 				$this->data['csrf'] = $this->_get_csrf_nonce();
 				$this->data['code'] = $code;
 
-				$this->data['page'] = 'reset_password';
-				$this->_render_page('layout', $this->data);
+				$this->data['jsauth'] = 'jsauth';
+				$this->_render_page('reset_password', $this->data);
 			} else {
 				$identity = $user->email;
 

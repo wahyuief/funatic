@@ -26,6 +26,7 @@
     </script>
 </head>
 <body class="bg-black">
+    <div class="wrapper">
     <div class="container-md">
         <div class="site-name text-center">
             <img src="<?php echo base_url('assets/funatic/images/funatic.png') ?>" alt="funatic" width="200">
