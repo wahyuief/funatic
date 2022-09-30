@@ -51,7 +51,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $route['auth/password/forgot'] = 'auth/forgot_password';
 $route['auth/password/reset/(:any)'] = 'auth/reset_password/$1';
-$route['logout'] = 'dashboard/logout';
+$route['logout'] = 'home/logout';
+
+$route['order/(:any)'] = 'order/index/$1';
+$route['invoice/(:any)'] = 'invoice/index/$1';
 
 $route['default_controller'] = 'home';
 $route['404_override'] = '';

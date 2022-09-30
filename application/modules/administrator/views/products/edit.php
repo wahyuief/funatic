@@ -46,9 +46,16 @@
                                                 <input type="checkbox" name="quantity_active" id="quantity_active" <?php echo ($data->quantity_active ? 'checked' : '') ?> value="<?php echo $this->form_validation->set_value('quantity_active', 1); ?>"> Activate purchase using quantity
                                           </label>
                                     </div>
-                                    <div id="quantity_name_field" class="mb-3">
-                                          <label for="quantity_name">Quantity Name</label>
-                                          <input type="text" name="quantity_name" id="quantity_name" value="<?php echo $this->form_validation->set_value('quantity_name', $data->quantity_name); ?>" class="form-control">
+                                    <div id="section-quantity_field" class="mb-3">
+                                          <label for="quantity_field">Quantity Field</label>
+                                          <select name="quantity_field" id="quantity_field" class="form-control">
+                                                <option value="" disabled selected>Select Quantity Field</option>
+                                                <?php
+                                                      foreach (json_decode($data->custom_field) as $field) {
+                                                            echo '<option '.($field->name === $data->quantity_field ? 'selected' : '').' value="'.$field->name.'">'.$field->label.' ('.$field->name.')</option>';
+                                                      }
+                                                ?>
+                                          </select>
                                     </div>
                                     <div class="mb-3">
                                           <label for="customer_id_field">Customer ID Field</label>
@@ -57,6 +64,18 @@
                                                 <?php
                                                       foreach (json_decode($data->custom_field) as $field) {
                                                             echo '<option '.($field->name === $data->customer_id_field ? 'selected' : '').' value="'.$field->name.'">'.$field->label.' ('.$field->name.')</option>';
+                                                      }
+                                                ?>
+                                          </select>
+                                          <small>This option is from custom field</small>
+                                    </div>
+                                    <div class="mb-3">
+                                          <label for="phone_field">Phone Number Field</label>
+                                          <select name="phone_field" id="phone_field" class="form-control" <?php echo ($data->custom_field ? 'required' : '') ?>>
+                                                <option value="" disabled selected>Select Phone Number Field</option>
+                                                <?php
+                                                      foreach (json_decode($data->custom_field) as $field) {
+                                                            echo '<option '.($field->name === $data->phone_field ? 'selected' : '').' value="'.$field->name.'">'.$field->label.' ('.$field->name.')</option>';
                                                       }
                                                 ?>
                                           </select>
@@ -101,14 +120,14 @@
       };
       $(document.getElementById('fb-customfield')).formBuilder(options);
 
-      <?php echo ($data->quantity_active ? '' : "$('#quantity_name_field').hide();") ?>
+      <?php echo ($data->quantity_active ? '' : "$('#section-quantity_field').hide();") ?>
       $('#quantity_active').change(function () {
       if (!this.checked) {
-            $('#quantity_name').removeAttr('required');
-            $('#quantity_name_field').hide();
+            $('#quantity_field').removeAttr('required');
+            $('#section-quantity_field').hide();
       } else {
-            $('#quantity_name').attr('required', true);
-            $('#quantity_name_field').show();
+            $('#quantity_field').attr('required', true);
+            $('#section-quantity_field').show();
       }
     });
 </script>

@@ -4,10 +4,12 @@ define('GAME_ENDPOINT', 'https://pay.tokomini.net/api/');
 
 function pricelist($category = false, $option = false) {
     $request = new HTTP_Request2();
-    $request->setUrl('https://pay.tokomini.net/api/pricelist');
+    $request->setUrl(GAME_ENDPOINT . 'pricelist');
     $request->setMethod(HTTP_Request2::METHOD_GET);
     $request->setConfig(array(
-        'follow_redirects' => TRUE
+        'follow_redirects' => TRUE,
+        'ssl_verify_peer' => FALSE,
+        'ssl_verify_host' => FALSE
     ));
     $request->setHeader(array(
         'Cookie' => 'csrf_cookie=71c8e0bb1e01ec9795299609e88ee996; sid=hitik5rnhc79p8cfqgb5ferteifgdn8k'
@@ -42,12 +44,42 @@ function pricelist($category = false, $option = false) {
     }
 }
 
-function mlbb_validator($player_id) {
+function order_produk($data) {
     $request = new HTTP_Request2();
-    $request->setUrl('https://pay.tokomini.net/api/id/mlbb/' . $player_id);
-    $request->setMethod(HTTP_Request2::METHOD_GET);
+    $request->setUrl(GAME_ENDPOINT . 'v3');
+    $request->setMethod(HTTP_Request2::METHOD_POST);
     $request->setConfig(array(
         'follow_redirects' => TRUE
+    ));
+    $request->setHeader(array(
+        'Content-Type' => 'application/json'
+    ));
+    $reqdata['apikey'] = '';
+    $reqdata['command'] = 'order';
+    $reqdata['data'] = array($data);
+    $request->setBody(json_encode($reqdata));
+    try {
+        $response = $request->send();
+        if ($response->getStatus() == 200) {
+            return json_decode($response->getBody(), TRUE);
+        }
+        else {
+            return $response->getStatus() . ' ' . $response->getReasonPhrase();
+        }
+    }
+        catch(HTTP_Request2_Exception $e) {
+        return $e->getMessage();
+    }
+}
+
+function mlbb_validator($player_id) {
+    $request = new HTTP_Request2();
+    $request->setUrl(GAME_ENDPOINT . 'id/mlbb/' . $player_id);
+    $request->setMethod(HTTP_Request2::METHOD_GET);
+    $request->setConfig(array(
+        'follow_redirects' => TRUE,
+        'ssl_verify_peer' => FALSE,
+        'ssl_verify_host' => FALSE
     ));
     $request->setHeader(array(
         'Cookie' => 'csrf_cookie=71c8e0bb1e01ec9795299609e88ee996; sid=hitik5rnhc79p8cfqgb5ferteifgdn8k'
@@ -56,7 +88,7 @@ function mlbb_validator($player_id) {
         $response = $request->send();
         if ($response->getStatus() == 200) {
             $data = json_decode($response->getBody());
-            return $data->status;
+            return $data;
         } else {
             return $response->getStatus() . ' ' . $response->getReasonPhrase();
         }

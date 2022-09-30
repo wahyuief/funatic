@@ -37,13 +37,20 @@
 	</h2>
 </div>
 <div class="row bg-dark m-auto pt-1 pb-5 text-white">
-    <div class="col-sm-3">
-        <div class="card bg-semiblack shadow-sm">
-			<div class="card-body">
-				Diamond Mobile Legend
-			</div>
-		</div>
+    <?php foreach ($products as $product): ?>
+    <div class="col-sm-2">
+        <a href="<?php echo base_url('order/'.$product->slug) ?>" class="product-home text-decoration-none">
+            <div class="card bg-semiblack">
+                <img src="<?php echo base_url('uploads/'.$product->featured_image) ?>" class="card-img-top" alt="...">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" style="position:absolute;bottom:75px;"><path fill="#111111" fill-opacity="1" d="M0,128L10.9,144C21.8,160,44,192,65,197.3C87.3,203,109,181,131,160C152.7,139,175,117,196,106.7C218.2,96,240,96,262,80C283.6,64,305,32,327,37.3C349.1,43,371,85,393,101.3C414.5,117,436,107,458,122.7C480,139,502,181,524,176C545.5,171,567,117,589,112C610.9,107,633,149,655,144C676.4,139,698,85,720,58.7C741.8,32,764,32,785,32C807.3,32,829,32,851,58.7C872.7,85,895,139,916,165.3C938.2,192,960,192,982,202.7C1003.6,213,1025,235,1047,208C1069.1,181,1091,107,1113,96C1134.5,85,1156,139,1178,176C1200,213,1222,235,1244,213.3C1265.5,192,1287,128,1309,112C1330.9,96,1353,128,1375,128C1396.4,128,1418,96,1429,80L1440,64L1440,320L1429.1,320C1418.2,320,1396,320,1375,320C1352.7,320,1331,320,1309,320C1287.3,320,1265,320,1244,320C1221.8,320,1200,320,1178,320C1156.4,320,1135,320,1113,320C1090.9,320,1069,320,1047,320C1025.5,320,1004,320,982,320C960,320,938,320,916,320C894.5,320,873,320,851,320C829.1,320,807,320,785,320C763.6,320,742,320,720,320C698.2,320,676,320,655,320C632.7,320,611,320,589,320C567.3,320,545,320,524,320C501.8,320,480,320,458,320C436.4,320,415,320,393,320C370.9,320,349,320,327,320C305.5,320,284,320,262,320C240,320,218,320,196,320C174.5,320,153,320,131,320C109.1,320,87,320,65,320C43.6,320,22,320,11,320L0,320Z"></path></svg>
+                <div class="card-body text-center">
+                    <h4 class="fs-6 text-white"><?php echo $product->title ?></h4>
+                    <span class="fs-6 text-danger"><?php echo $product->category ?></span>
+                </div>
+            </div>
+        </a>
     </div>
+    <?php endforeach; ?>
 </div>
 <script>
     const carouselFunatic = document.querySelector('#carouselFunatic')

@@ -116,8 +116,9 @@ class Products extends BackendController {
 				'content' => $this->input->post('content'),
 				'category' => input_post('category'),
 				'quantity_active' => (input_post('quantity_active') ? input_post('quantity_active') : 0),
-				'quantity_name' => input_post('quantity_name'),
+				'quantity_field' => input_post('quantity_field'),
 				'customer_id_field' => input_post('customer_id_field'),
+				'phone_field' => input_post('phone_field'),
 				'custom_field' => ($this->input->post('customfield') ? $this->input->post('customfield') : NULL),
 			);
 

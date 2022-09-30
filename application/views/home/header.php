@@ -20,14 +20,16 @@
         ?>
     </style>
     <script src="<?php echo base_url('assets/funatic/js/jquery.min.js') ?>"></script>
+    <script src="<?php echo base_url('assets/funatic/js/bootstrap.bundle.min.js') ?>"></script>
+    <script src="<?php echo base_url('assets/funatic/js/form-render.min.js') ?>"></script>
+    <script src="<?php echo base_url('assets/funatic/js/notyf.min.js') ?>"></script>
     <script>
         var base_url = '<?php echo base_url(); ?>';
         var site_name = '<?php echo get_option('site_name'); ?>';
     </script>
 </head>
 <body class="bg-black">
-    <div class="wrapper">
-    <div class="container-md">
+    <div class="container-md mb-3">
         <div class="site-name text-center">
             <img src="<?php echo base_url('assets/funatic/images/funatic.png') ?>" alt="funatic" width="200">
         </div>
