@@ -1,11 +1,11 @@
 <div class="bg-dark m-auto ps-3 pe-3 pt-5 pb-1 text-white">
-	<h2 class="fs-4 m-0">
+	<div class="fs-4 m-0">
 		<span class="bg-semiblack badge">
 			<i class="fas fa-caret-right text-red"></i>
 		</span>
-		<span class="align-text-bottom">Data Invoice</span>
+		<h2 class="align-text-bottom d-inline fs-4">Data Invoice</h2>
 		<hr>
-	</h2>
+	</div>
 </div>
 <div class="row bg-dark m-auto pt-1 pb-5 text-white justify-content-center">
     <div class="col-sm-6">

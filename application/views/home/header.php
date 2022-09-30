@@ -30,7 +30,7 @@
 </head>
 <body class="bg-black">
     <div class="container-md mb-3">
-        <div class="site-name text-center">
+        <h1 class="site-name text-center">
             <img src="<?php echo base_url('assets/funatic/images/funatic.png') ?>" alt="funatic" width="200">
-        </div>
+        </h1>
         <div class="main-wrapper">

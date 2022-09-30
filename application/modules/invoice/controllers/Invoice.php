@@ -11,7 +11,6 @@ class Invoice extends FrontendController {
 
 	public function index()
 	{
-		echo json_encode(channel('ALFAMART'));die;
 		$no_invoice = $this->uri->segment(2);
 		$this->data['message'] = $this->_show_message();
 		if ($no_invoice) $this->_render_page('invoice_data', $this->data);

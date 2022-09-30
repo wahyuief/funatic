@@ -28,17 +28,17 @@
     </button>
 </div>
 <div class="bg-dark m-auto ps-3 pe-3 pt-5 pb-1 text-white">
-	<h2 class="widget m-0">
+	<div class="fs-4 widget m-0">
 		<span class="bg-semiblack badge">
 			<i class="fas fa-caret-right text-red"></i>
 		</span>
-		<span class="align-text-bottom">Mobile Legends</span>
+		<h2 class="align-text-bottom d-inline fs-4">Mobile Legends</h2>
 		<hr>
-	</h2>
+	</div>
 </div>
 <div class="row bg-dark m-auto pt-1 pb-5 text-white">
     <?php foreach ($products as $product): ?>
-    <div class="col-sm-2">
+    <div class="col-6 col-sm-2">
         <a href="<?php echo base_url('order/'.$product->slug) ?>" class="product-home text-decoration-none">
             <div class="card bg-semiblack">
                 <img src="<?php echo base_url('uploads/'.$product->featured_image) ?>" class="card-img-top" alt="...">
