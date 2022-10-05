@@ -62,13 +62,18 @@
                     </tr>
                     <tr>
                         <td>Status Transaksi</td>
-                        <td><?php echo ($invoice->status_transaction ? '<span class="badge bg-success">Transaksi Berhasil</span>' : ($invoice->payment_expired < time() ? '<span class="badge bg-danger text-black">Gagal</span>' : '<span class="badge bg-warning text-black">Belum Diproses</span>')); ?></td>
+                        <td><?php echo ($invoice->status_transaction ? '<span class="badge bg-success">Transaksi Berhasil</span>' : ($invoice->payment_expired < time() ? '<span class="badge bg-danger text-black">Gagal</span>' : (!empty($invoice->transaction_id) ? '<span class="badge bg-info text-black">Sedang Diproses</span>' : '<span class="badge bg-warning text-black">Belum Diproses</span>'))); ?></td>
                     </tr>
                     <tr>
                         <td>Total Tagihan</td>
                         <td><?php echo rupiah($invoice->total_price); ?></td>
                     </tr>
                 </table>
+                <?php if(!empty($invoice->pay_url)): ?>
+                <div class="text-center mb-4">
+                    <a href="<?php echo $invoice->pay_url; ?>" class="btn w-100 btn-warning"><i class="fas fa-paper-plane"></i> Lanjutkan Pembayaran</a>
+                </div>
+                <?php endif; ?>
                 <div class="bg-dark p-3 rounded">
                     <h4 class="fs-5">Cara Pembayaran</h4>
                     <div class="accordion accordion-dark" id="instruksipembayaran">
@@ -96,4 +101,4 @@
         </div>
     </div>
 </div>
-<?php if(!$invoice->status_payment && $invoice->payment_expired > time()): ?><script>setTimeout(() => {location.reload()}, 10000);</script><?php endif; ?>
+<?php if(!$invoice->status_payment && $invoice->payment_expired > time()): ?><script>setTimeout(() => {location.reload()}, 10000);</script><?php else: ?><script>setTimeout(() => {location.reload()}, 60000);</script><?php endif; ?>

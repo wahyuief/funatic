@@ -9,7 +9,7 @@ class Payment extends FrontendController {
 		$this->load->model('buyers_model');
     }
 
-	public function callback()
+	public function payment()
 	{
 		$json = file_get_contents('php://input');
 		$callbackSignature = isset($_SERVER['HTTP_X_CALLBACK_SIGNATURE']) ? $_SERVER['HTTP_X_CALLBACK_SIGNATURE'] : '';
@@ -40,5 +40,11 @@ class Payment extends FrontendController {
 
 		$uniqueRef = $db->real_escape_string($data->merchant_ref);
 		$status = strtoupper((string) $data->status);
+	}
+
+	public function transaction()
+	{
+		$json = file_get_contents('php://input');
+		
 	}
 }

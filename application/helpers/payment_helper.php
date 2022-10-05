@@ -33,7 +33,7 @@ function instruction($code, $pay_code = false, $amount = false) {
     }
 }
 
-function detail_transaction($payment_id) {
+function detail_payment($payment_id) {
     $request = new HTTP_Request2();
     $request->setUrl(PAYMENT_ENDPOINT . 'transaction/detail');
     $request->setMethod(HTTP_Request2::METHOD_GET);

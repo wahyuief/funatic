@@ -1,5 +1,6 @@
 <?php
 
+define('GAME_APIKEY', '');
 define('GAME_ENDPOINT', 'https://pay.tokomini.net/api/');
 
 function pricelist($category = false, $option = false) {
@@ -44,6 +45,34 @@ function pricelist($category = false, $option = false) {
     }
 }
 
+function detail_transaction($transaction_id) {
+    $request = new HTTP_Request2();
+    $request->setUrl(GAME_ENDPOINT . 'v3');
+    $request->setMethod(HTTP_Request2::METHOD_POST);
+    $request->setConfig(array(
+        'follow_redirects' => TRUE
+    ));
+    $request->setHeader(array(
+        'Content-Type' => 'application/json'
+    ));
+    $reqdata['apikey'] = GAME_APIKEY;
+    $reqdata['command'] = 'order';
+    $reqdata['idtrx'] = $transaction_id;
+    $request->setBody(json_encode($reqdata));
+    try {
+        $response = $request->send();
+        if ($response->getStatus() == 200) {
+            return json_decode($response->getBody(), TRUE);
+        }
+        else {
+            return $response->getStatus() . ' ' . $response->getReasonPhrase();
+        }
+    }
+        catch(HTTP_Request2_Exception $e) {
+        return $e->getMessage();
+    }
+}
+
 function order_produk($data) {
     $request = new HTTP_Request2();
     $request->setUrl(GAME_ENDPOINT . 'v3');
@@ -54,7 +83,7 @@ function order_produk($data) {
     $request->setHeader(array(
         'Content-Type' => 'application/json'
     ));
-    $reqdata['apikey'] = '';
+    $reqdata['apikey'] = GAME_APIKEY;
     $reqdata['command'] = 'order';
     $reqdata['data'] = array($data);
     $request->setBody(json_encode($reqdata));

@@ -22,8 +22,9 @@ class Invoice extends FrontendController {
 			$invoice = $this->orders_model->get(['no_invoice' => $no_invoice]);
 			if (!$invoice->num_rows()) show_404();
 			$this->data['invoice'] = $invoice->row();
-			$this->_confirm_payment($this->data['invoice']->payment_id);
 			$this->data['variation'] = $variation = $this->variations_model->get(['id' => $this->data['invoice']->variation_id])->row();
+			if (!$this->data['invoice']->status_payment) $this->_confirm_payment($this->data['invoice']->payment_id, $variation->variation_code);
+			if (!$this->data['invoice']->status_transaction) $this->_confirm_transaction($this->data['invoice']->transaction_id);
 			$this->data['product'] = $product = $this->products_model->get(['id' => $variation->product_id])->row();
 			$this->data['buyer'] = $buyer = $this->buyers_model->get(['id' => $this->data['invoice']->buyer_id])->row();
 			$this->data['data'] = json_decode($buyer->buyer_data);
@@ -33,9 +34,29 @@ class Invoice extends FrontendController {
 		}
 	}
 
-	function _confirm_payment($payment_id)
+	function _confirm_payment($payment_id, $variation_code)
 	{
-		$transaction = detail_transaction($payment_id);
-		if ($transaction['status'] === 'PAID') $this->orders_model->set(['status_payment' => 1], ['payment_id' => $payment_id]);
+		$payment = detail_payment($payment_id);
+		if ($payment['status'] === 'PAID') {
+			$no_invoice = $payment['merchant_ref'];
+			$data = array(
+				'buyer_id' => $no_invoice,
+				'trx_code' => $variation_code,
+				'phone_number' => $phone
+			);
+			$order = order_produk($data);
+			$this->orders_model->set(['transaction_id' => $order['data'][$no_invoice]['idtrx'], 'status_payment' => 1], ['no_invoice' => $no_invoice]);
+		}
+	}
+
+	function _confirm_transaction($transaction_id)
+	{
+		$transaction = detail_transaction($transaction_id);
+		if (is_array($transaction)) {
+			$input['status_transaction'] = 0;
+			$input['keterangan'] = $transaction['data'][$transaction_id]['sn'];
+			if ($transaction['data'][$transaction_id]['status'] === 'SUCCESS') $input['status_transaction'] = 1;
+			$this->orders_model->set($input, ['transaction_id' => $transaction_id]);
+		}
 	}
 }

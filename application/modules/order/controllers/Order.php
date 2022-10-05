@@ -161,7 +161,7 @@ class Order extends FrontendController {
 						'price' => (int)$price,
 						'quantity' => (int)$quantity
 					)),
-					'callback_url' => base_url('payment/callback'),
+					'callback_url' => base_url('callback/payment'),
 					'return_url' => base_url('invoice/' . $no_invoice),
 					'expired_time' => $payment_expired,
 					'signature' => payment_signature($no_invoice, $totalprice)
