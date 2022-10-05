@@ -206,6 +206,7 @@
     $('form').submit(function(e){
         e.preventDefault(e);
         $('#submit').prop('disabled', true)
+        $('#submit').html('<i class="fas fa-spinner"></i> Process..')
         var csrf = $('form').children('input:first-child')
         $.ajax({
             url: $(this).attr('action'),
@@ -225,6 +226,7 @@
                 csrf.attr('name', data.csrf.name)
                 csrf.attr('value', data.csrf.value)
                 setTimeout(() => {
+                    $('#submit').html('<i class="fas fa-shopping-cart"></i> Order Now')
                     $('#submit').prop('disabled', false)
                 }, 1000);
             }

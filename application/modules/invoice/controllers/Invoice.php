@@ -45,7 +45,7 @@ class Invoice extends FrontendController {
 				'phone_number' => $phone
 			);
 			$order = order_produk($data);
-			$this->orders_model->set(['transaction_id' => $order['data'][$no_invoice]['idtrx'], 'status_payment' => 1], ['no_invoice' => $no_invoice]);
+			if (is_array($order)) $this->orders_model->set(['transaction_id' => $order['data'][$no_invoice]['idtrx'], 'status_payment' => 1], ['no_invoice' => $no_invoice]);
 		}
 	}
 

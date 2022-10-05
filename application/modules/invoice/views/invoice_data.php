@@ -45,20 +45,20 @@
                         <td>Metode Pembayaran</td>
                         <td><?php echo $invoice->payment_name; ?></td>
                     </tr>
-                    <?php if(!empty($invoice->pay_url)): ?>
+                    <?php if($invoice->payment_expired > time()): if(!empty($invoice->pay_url)): ?>
                     <tr>
                         <td>No. Telp</td>
                         <td><?php echo $buyer->phone; ?></td>
                     </tr>
                     <?php else: ?>
                     <tr>
-                        <td>Kode Virtual Account</td>
+                        <td>Kode Pembayaran</td>
                         <td><?php echo $invoice->pay_code; ?></td>
                     </tr>
-                    <?php endif; ?>
+                    <?php endif;endif; ?>
                     <tr>
                         <td>Status Pembayaran</td>
-                        <td><?php echo ($invoice->status_payment ? '<span class="badge bg-success">Pembayaran Berhasil</span>' : ($invoice->payment_expired < time() ? '<span class="badge bg-danger text-black">Gagal</span>' : '<span class="badge bg-warning text-black">Belum Bayar</span>')); ?></td>
+                        <td><?php echo ($invoice->status_payment ? '<span class="badge bg-success">Pembayaran Berhasil</span>' : ($invoice->payment_expired < time() ? '<span class="badge bg-danger text-black">Kedaluwarsa</span>' : '<span class="badge bg-warning text-black">Belum Bayar</span>')); ?></td>
                     </tr>
                     <tr>
                         <td>Status Transaksi</td>
@@ -69,22 +69,23 @@
                         <td><?php echo rupiah($invoice->total_price); ?></td>
                     </tr>
                 </table>
+                <?php if($invoice->payment_expired > time()): ?>
                 <?php if(!empty($invoice->pay_url)): ?>
                 <div class="text-center mb-4">
                     <a href="<?php echo $invoice->pay_url; ?>" class="btn w-100 btn-warning"><i class="fas fa-paper-plane"></i> Lanjutkan Pembayaran</a>
                 </div>
-                <?php endif; ?>
+                <?php endif;$instructions = instruction($data->payment, $invoice->pay_code, (int)$invoice->total_price);if(is_array($instructions)): ?>
                 <div class="bg-dark p-3 rounded">
                     <h4 class="fs-5">Cara Pembayaran</h4>
                     <div class="accordion accordion-dark" id="instruksipembayaran">
-                        <?php foreach(instruction($data->payment, $invoice->pay_code, (int)$invoice->total_price) as $instruction): ?>
+                        <?php foreach($instructions as $instruction): ?>
                         <div class="accordion-item">
                             <h4 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#<?php echo str_replace(' ', '', $instruction['title']); ?>" aria-expanded="false" aria-controls="instruksipembayaran">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#<?php echo str_replace(' ', '', $instruction['title']); ?>" aria-expanded="false" aria-controls="instruksipembayaran">
                                     <?php echo $instruction['title']; ?>
                                 </button>
                             </h4>
-                            <div id="<?php echo str_replace(' ', '', $instruction['title']); ?>" class="accordion-collapse collapse" data-bs-parent="#instruksipembayaran">
+                            <div id="<?php echo str_replace(' ', '', $instruction['title']); ?>" class="accordion-collapse collapse show" data-bs-parent="#instruksipembayaran">
                                 <div class="accordion-body">
                                     <ol>
                                         <?php foreach($instruction['steps'] as $step): ?>
@@ -97,8 +98,9 @@
                         <?php endforeach; ?>
                     </div>
                 </div>
+                <?php endif;endif; ?>
             </div>
         </div>
     </div>
 </div>
-<?php if(!$invoice->status_payment && $invoice->payment_expired > time()): ?><script>setTimeout(() => {location.reload()}, 10000);</script><?php else: ?><script>setTimeout(() => {location.reload()}, 60000);</script><?php endif; ?>
+<?php if(!$invoice->status_payment && $invoice->payment_expired > time()): ?><script>setTimeout(() => {location.reload()}, 30000);</script><?php else: ?><script>setTimeout(() => {location.reload()}, 60000);</script><?php endif; ?>
