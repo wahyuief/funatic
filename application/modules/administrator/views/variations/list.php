@@ -52,7 +52,7 @@
                         <div class="btn-group">
                           <a href="#" class="text-lg text-dark" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis"></i></a>
                           <div class="dropdown-menu" role="menu" style="">
-                            <a class="dropdown-item" href="<?php echo base_url('administrator/variations/edit/' . wah_encode($row->id)); ?>">Edit</a>
+                            <a class="dropdown-item" href="<?php echo base_url('administrator/variations/edit/all?id='.input_get('id')); ?>">Edit</a>
                             <a class="dropdown-item" data-toggle="confirmation" data-title="Are you sure want to delete?"  data-placement="left" href="<?php echo base_url('administrator/variations/delete/' . wah_encode($row->id)); ?>">Delete</a>
                           </div>
                         </div>

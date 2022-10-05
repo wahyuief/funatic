@@ -106,7 +106,6 @@
 
       var options = {
             roles: false,
-            controlPosition: 'left',
             disableFields: ['autocomplete', 'button', 'file', 'textarea'],
             disabledAttrs: ['access'],
             disabledActionButtons: ['data'],

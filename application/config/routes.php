@@ -55,6 +55,7 @@ $route['logout'] = 'home/logout';
 
 $route['order/(:any)'] = 'order/index/$1';
 $route['invoice/(:any)'] = 'invoice/index/$1';
+$route['blog/(:any)'] = 'blog/index/$1';
 
 $route['default_controller'] = 'home';
 $route['404_override'] = '';

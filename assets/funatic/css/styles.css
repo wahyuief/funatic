@@ -41,6 +41,9 @@ body {
 .accordion-button::after {
     filter: invert(1);
 }
+.bg-dark {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%239C92AC' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
+}
 .bg-red-black {
     background: rgb(163,11,11);
     background: linear-gradient(180deg, rgba(163,11,11,1) 0%, rgba(103,8,8,1) 90%, rgba(43,3,3,1) 100%);
@@ -112,6 +115,7 @@ h3.widget {
 }
 .card-input-element:checked + .card-input .varian-price {
     color: red;
+    font-weight: bold;
 }
 .card-input .card-body, .varian-name, .payment-name {
     overflow: hidden;

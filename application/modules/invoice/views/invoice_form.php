@@ -16,7 +16,7 @@
                     <label for="no_invoice" class="form-label">No. Invoice</label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fas fa-file-invoice"></i></span>
-                        <input type="text" class="form-control" id="no_invoice" placeholder="FTC3491XXXXX">
+                        <input type="text" class="form-control" name="no" id="no_invoice" placeholder="FTC3491XXXXX" required>
                     </div>
                 </div>
                 <div class="text-end">

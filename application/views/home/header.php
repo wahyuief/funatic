@@ -23,6 +23,7 @@
     <script src="<?php echo base_url('assets/funatic/js/bootstrap.bundle.min.js') ?>"></script>
     <script src="<?php echo base_url('assets/funatic/js/form-render.min.js') ?>"></script>
     <script src="<?php echo base_url('assets/funatic/js/notyf.min.js') ?>"></script>
+    <script src="<?php echo base_url('assets/funatic/js/device-uuid.min.js') ?>"></script>
     <script>
         var base_url = '<?php echo base_url(); ?>';
         var site_name = '<?php echo get_option('site_name'); ?>';

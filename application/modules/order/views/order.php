@@ -215,6 +215,9 @@
                 data = JSON.parse(data)
                 if (data.status === true) {
                     notyf.success({'message': data.message, 'duration': 5000})
+                    setTimeout(() => {
+                        window.location.replace(base_url + 'invoice/' + data.invoice)
+                    }, 1000);
                 } else {
                     notyf.error({'message': data.message, 'duration': 5000})
                 }

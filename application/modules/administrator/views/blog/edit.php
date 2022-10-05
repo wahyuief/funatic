@@ -45,6 +45,9 @@
                                                 <div class="input-group-text"><i class="fas fa-image"></i></div>
                                           </div>
                                     </div>
+                                    <div id="divpreview" class="mb-2">
+                                          <img src="<?php echo ($data->featured_image ? base_url('uploads/' . $data->featured_image) : '#') ?>" alt="preview" id="preview" class="img-thumbnail">
+                                    </div>
                                     <label for="meta_title">Meta Title</label>
                                     <div class="mb-3">
                                           <input type="text" name="meta_title" id="meta_title" value="<?php echo $this->form_validation->set_value('meta_title', $data->meta_title); ?>" class="form-control">
@@ -52,7 +55,7 @@
                                     </div>
                                     <label for="meta_description">Meta Description</label>
                                     <div class="mb-3">
-                                          <textarea name="meta_description" id="meta_description" value="<?php echo $this->form_validation->set_value('meta_description', $data->meta_description); ?>" class="form-control"></textarea>
+                                          <textarea name="meta_description" id="meta_description" class="form-control"><?php echo $this->form_validation->set_value('meta_description', $data->meta_description); ?></textarea>
                                           <div class="text-sm text-muted"><span id="count_metadesc">0</span> characters. The ideal length for the meta description is 155-160 characters.</div>
                                     </div>
                               </div>
@@ -63,6 +66,14 @@
       </div>
 </div>
 <script>
+      <?php if(empty($data->featured_image)): ?>divpreview.style.display = 'none';<?php endif; ?>
+      featured_image.onchange = evt => {
+            const [file] = featured_image.files
+            if (file) {
+                  divpreview.style.display = 'block';
+                  preview.src = URL.createObjectURL(file)
+            }
+      }
       $(document).ready(function() {
             $('#content').summernote({
                   placeholder: 'Tulis konten disini..',

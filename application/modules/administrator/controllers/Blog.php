@@ -54,6 +54,23 @@ class Blog extends BackendController {
 				'meta_description' => (input_post('meta_description') ? input_post('meta_description') : wordwrap(input_post('content'), 30)),
 			);
 
+			if (isset($_FILES['featured_image'])) {
+				$config['upload_path']		= './uploads/';
+				$config['allowed_types']	= 'jpeg|jpg|png';
+				$config['max_size']			= 2048;
+				$config['file_ext_tolower']	= true;
+				$config['encrypt_name']		= true;
+	
+				$this->load->library('upload', $config);
+				$this->upload->initialize($config);
+	
+				if ($this->upload->do_upload('featured_image')) {
+					$input['featured_image'] = $this->upload->data('file_name');
+				} else {
+					$this->_set_message('error', 'Maximum image size is 2mb.');
+				}
+			}
+
 			if (input_post('submit') === 'publish') {
 				$input['published'] = 1;
 				$input['published_at'] = date('Y-m-d H:i:s');
@@ -94,6 +111,23 @@ class Blog extends BackendController {
 				'meta_title' => (input_post('meta_title') ? input_post('meta_title') : input_post('title')),
 				'meta_description' => (input_post('meta_description') ? input_post('meta_description') : wordwrap(input_post('content'), 30)),
 			);
+
+			if (isset($_FILES['featured_image'])) {
+				$config['upload_path']		= './uploads/';
+				$config['allowed_types']	= 'jpeg|jpg|png';
+				$config['max_size']			= 2048;
+				$config['file_ext_tolower']	= true;
+				$config['encrypt_name']		= true;
+	
+				$this->load->library('upload', $config);
+				$this->upload->initialize($config);
+	
+				if ($this->upload->do_upload('featured_image')) {
+					$input['featured_image'] = $this->upload->data('file_name');
+				} else {
+					$this->_set_message('error', 'Maximum image size is 2mb.');
+				}
+			}
 
 			if (input_post('submit') === 'publish') {
 				$input['published'] = 1;

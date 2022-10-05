@@ -11,7 +11,7 @@ class FrontendController extends MY_Controller
     }
 
     protected function _render_page($view, $data) {
-		$data['title'] = $this->config->item('site_title', 'ion_auth') . ($this->uri->segment(2) ? ' | ' . ucwords($this->uri->segment(2)) : '') . ($this->uri->segment(3) ?  ' - ' .ucwords($this->uri->segment(3)) : '');
+		$data['title'] = ($this->uri->segment(2) ? ucwords(str_replace('-', ' ', $this->uri->segment(2))) . ' | ' : '') . ($this->uri->segment(1) ?  ucwords(str_replace('-', ' ', $this->uri->segment(1))) . ' - ' : '') . $this->config->item('site_title', 'ion_auth');
 		$this->load->view('home/header', $data);
 		$this->load->view('home/navbar', $data);
 		$this->load->view('home/sidebar', $data);

@@ -74,16 +74,18 @@ function order_produk($data) {
 
 function mlbb_validator($player_id) {
     $request = new HTTP_Request2();
-    $request->setUrl(GAME_ENDPOINT . 'id/mlbb/' . $player_id);
-    $request->setMethod(HTTP_Request2::METHOD_GET);
+    $request->setUrl('https://apivouchergame.com/api/check-game-id/mobile-legend');
+    $request->setMethod(HTTP_Request2::METHOD_POST);
     $request->setConfig(array(
-        'follow_redirects' => TRUE,
-        'ssl_verify_peer' => FALSE,
-        'ssl_verify_host' => FALSE
+        'follow_redirects' => TRUE
     ));
     $request->setHeader(array(
-        'Cookie' => 'csrf_cookie=71c8e0bb1e01ec9795299609e88ee996; sid=hitik5rnhc79p8cfqgb5ferteifgdn8k'
+        'Authorization' => 'Bearer 192|OgXkZZs1LT4QsKfHhNqJC2Kmn9sKJnDg6BD2XvXM',
+        'Content-Type' => 'application/json'
     ));
+    $zoneid = (int)substr($player_id, -4);
+    $userid = (int)str_replace($zoneid, '', $player_id);
+    $request->setBody('{"uid": '.$userid.', "zid": '.$zoneid.'}');
     try {
         $response = $request->send();
         if ($response->getStatus() == 200) {
