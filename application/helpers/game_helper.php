@@ -101,9 +101,9 @@ function order_produk($data) {
     }
 }
 
-function mlbb_validator($player_id) {
+function gameid_validator($player_id, $slug) {
     $request = new HTTP_Request2();
-    $request->setUrl('https://apivouchergame.com/api/check-game-id/mobile-legend');
+    $request->setUrl('https://apivouchergame.com/api/check-game-id/' . $slug);
     $request->setMethod(HTTP_Request2::METHOD_POST);
     $request->setConfig(array(
         'follow_redirects' => TRUE
@@ -112,9 +112,15 @@ function mlbb_validator($player_id) {
         'Authorization' => 'Bearer 192|OgXkZZs1LT4QsKfHhNqJC2Kmn9sKJnDg6BD2XvXM',
         'Content-Type' => 'application/json'
     ));
-    $zoneid = (int)substr($player_id, -4);
-    $userid = (int)str_replace($zoneid, '', $player_id);
-    $request->setBody('{"uid": '.$userid.', "zid": '.$zoneid.'}');
+
+    if ($slug === 'mobile-legend') {
+        $zoneid = (int)substr($player_id, -4);
+        $userid = (int)str_replace($zoneid, '', $player_id);
+        $request->setBody('{"uid": "'.$userid.'", "zid": "'.$zoneid.'"}');
+    } else {
+        $request->setBody('{"uid": "'.$player_id.'"}');
+    }
+
     try {
         $response = $request->send();
         if ($response->getStatus() == 200) {

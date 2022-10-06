@@ -52,9 +52,9 @@ class Order extends FrontendController {
 				return;
 			}
 
-			if (strpos($product->category, 'Mobile Legends') !== false) {
-				$mlbb = mlbb_validator($customer_id);
-				if ($mlbb->code !== '200') {
+			if (strpos($product->category, 'Mobile Legends') !== false && !empty($customer_id_field)) {
+				$gameid = gameid_validator($customer_id, 'mobile-legend');
+				if ($gameid->code !== '200') {
 					$output = array(
 						'status' => false,
 						'message' => 'ID tidak ditemukan',
@@ -66,7 +66,58 @@ class Order extends FrontendController {
 					echo json_encode($output);
 					return;
 				}
-				$nickname = $mlbb->result;
+				$nickname = $gameid->result;
+			}
+
+			if (strpos($product->category, 'Free Fire') !== false && !empty($customer_id_field)) {
+				$gameid = gameid_validator($customer_id, 'free-fire');
+				if ($gameid->code !== '200') {
+					$output = array(
+						'status' => false,
+						'message' => 'ID tidak ditemukan',
+						'csrf' => array(
+							'name' => $this->security->get_csrf_token_name(),
+							'value' => $this->security->get_csrf_hash()
+						)
+					);
+					echo json_encode($output);
+					return;
+				}
+				$nickname = $gameid->result;
+			}
+
+			if (strpos($product->category, 'Call of Duty') !== false && !empty($customer_id_field)) {
+				$gameid = gameid_validator($customer_id, 'call-of-duty-mobile');
+				if ($gameid->code !== '200') {
+					$output = array(
+						'status' => false,
+						'message' => 'ID tidak ditemukan',
+						'csrf' => array(
+							'name' => $this->security->get_csrf_token_name(),
+							'value' => $this->security->get_csrf_hash()
+						)
+					);
+					echo json_encode($output);
+					return;
+				}
+				$nickname = $gameid->result;
+			}
+
+			if (strpos($product->category, 'Higgs Domino') !== false && !empty($customer_id_field)) {
+				$gameid = gameid_validator($customer_id, 'higgs-domino');
+				if ($gameid->code !== '200') {
+					$output = array(
+						'status' => false,
+						'message' => 'ID tidak ditemukan',
+						'csrf' => array(
+							'name' => $this->security->get_csrf_token_name(),
+							'value' => $this->security->get_csrf_hash()
+						)
+					);
+					echo json_encode($output);
+					return;
+				}
+				$nickname = $gameid->result;
 			}
 
 			if ($product->quantity_active > 0) {

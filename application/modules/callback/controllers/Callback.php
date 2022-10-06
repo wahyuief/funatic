@@ -40,9 +40,11 @@ class Payment extends FrontendController {
 
 		if (is_array($data)) {
 			$no_invoice = $data['merchant_ref'];
+			$order = $this->orders_model->get(['no_invoice' => $no_invoice, 'status_payment' => '0'])->row();
+			if (!$order) exit(json_encode(['success' => false]));
 			if ($data['status'] === 'PAID') {
 				$input['status_payment'] = 1;
-				$this->orders_model->set($input, ['no_invoice' => $no_invoice]);
+				$this->orders_model->set($input, ['id' => $order->id]);
 				exit(json_encode([
 					'success' => true,
 				]));
@@ -56,10 +58,12 @@ class Payment extends FrontendController {
 		$data = json_decode($json, TRUE);
 		if (is_array($data)) {
 			$transaction_id = $data['idtrx'];
+			$order = $this->orders_model->get(['transaction_id' => $transaction_id, 'status_transaction' => '0'])->row();
+			if (!$order) exit(json_encode(['success' => false]));
 			$input['status_transaction'] = 0;
 			$input['keterangan'] = $data['note'];
 			if ($data['status']) $input['status_transaction'] = 1;
-			$this->orders_model->set($input, ['transaction_id' => $transaction_id]);
+			$this->orders_model->set($input, ['id' => $order->id]);
 			exit(json_encode([
 				'success' => true,
 			]));
