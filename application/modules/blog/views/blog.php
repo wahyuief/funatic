@@ -14,22 +14,22 @@
             <?php if ($blog->featured_image): ?>
             <div class="row g-0">
                 <div class="col-sm-4">
-                    <?php echo '<a href="'.base_url('blog/'. $blog->slug).'" title="'.$blog->title.'" class="text-decoration-none"><img src="'.base_url('uploads/' . $blog->featured_image).'" alt="'.$blog->title.'" class="img-fluid rounded-start h-100"></a>' ?>
+                    <?php echo '<a href="'.base_url('blog/'. $blog->slug).'" title="'.$blog->title.'" class="text-decoration-none"><img src="'.base_url('uploads/' . $blog->featured_image).'" alt="'.$blog->title.'" class="img-fluid rounded h-100"></a>' ?>
                 </div>
                 <div class="col-sm-8">
-                    <div class="card-header">
+                    <div class="card-header pb-1">
                         <h2 class="fs-4 m-0"><a href="<?php echo base_url('blog/'. $blog->slug) ?>" title="<?php echo $blog->title ?>" class="text-decoration-none"><?php echo $blog->title ?></a></h2>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body pt-1">
                         <?php echo substr(strip_tags($blog->content), 0, 250) ?>
                     </div>
                 </div>
             </div>
             <?php else: ?>
-            <div class="card-header">
+            <div class="card-header pb-1">
                 <h2 class="fs-4 m-0"><a href="<?php echo base_url('blog/'. $blog->slug) ?>" title="<?php echo $blog->title ?>" class="text-decoration-none"><?php echo $blog->title ?></a></h2>
             </div>
-            <div class="card-body">
+            <div class="card-body pt-1">
                 <?php echo substr(strip_tags($blog->content), 0, 250) ?>
             </div>
             <?php endif; ?>
