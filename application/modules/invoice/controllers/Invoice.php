@@ -27,7 +27,9 @@ class Invoice extends FrontendController {
 			$this->data['buyer'] = $buyer = $this->buyers_model->get(['id' => $this->data['invoice']->buyer_id])->row();
 			$this->data['data'] = $data = json_decode($buyer->buyer_data);
 			$customer_id_field = $product->customer_id_field;
-			if (!$this->data['invoice']->status_payment) $this->_confirm_payment($this->data['invoice']->payment_id, $variation->variation_code, $data->$customer_id_field);
+			$customer_id = false;
+			if ($customer_id_field) $customer_id = $data->$customer_id_field;
+			if (!$this->data['invoice']->status_payment) $this->_confirm_payment($this->data['invoice']->payment_id, $variation->variation_code, $customer_id);
 			if (!$this->data['invoice']->status_transaction) $this->_confirm_transaction($this->data['invoice']->transaction_id);
 			$this->_render_page('invoice_data', $this->data);
 		} else {
@@ -35,7 +37,7 @@ class Invoice extends FrontendController {
 		}
 	}
 
-	function _confirm_payment($payment_id, $variation_code, $customer_id)
+	function _confirm_payment($payment_id, $variation_code, $customer_id = false)
 	{
 		$payment = detail_payment($payment_id);
 		if ($payment['status'] === 'PAID') {
@@ -43,9 +45,9 @@ class Invoice extends FrontendController {
 			$data = array(
 				'buyer_id' => $no_invoice,
 				'trx_code' => $variation_code,
-				'phone_number' => $phone,
-				'customer_id' => $customer_id
+				'phone_number' => $phone
 			);
+			if ($customer_id) $data['customer_id'] = $customer_id;
 			$order = order_produk($data);
 			if (is_array($order)) $this->orders_model->set(['transaction_id' => $order['data'][$no_invoice]['idtrx'], 'status_payment' => 1], ['no_invoice' => $no_invoice]);
 		}

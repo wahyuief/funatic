@@ -12,6 +12,9 @@ class Orders extends BackendController {
 		if (!$this->ion_auth->logged_in()) redirect(base_url('auth/login'), 'refresh');
 		if (!$this->ion_auth->is_admin()) show_error('Sorry you do not have permission to access this page');
 		$this->load->model('orders_model');
+		$this->load->model('buyers_model');
+		$this->load->model('variations_model');
+		$this->load->model('products_model');
     }
 
 	public function index()
@@ -69,48 +72,19 @@ class Orders extends BackendController {
 		}
 	}
 
-	public function edit($id)
+	public function view($id)
 	{
 		$data = $this->orders_model->get(['orders.id' => wah_decode($id)]);
 		if (!$data->num_rows()) redirect(base_url('administrator/orders'), 'refresh');
 
-		$this->form_validation->set_rules('title', 'title', 'trim|required');
-		$this->form_validation->set_rules('content', 'content', 'trim|required');
-
-		if ($this->form_validation->run() === FALSE) {
-			$this->data['csrf'] = $this->_get_csrf_nonce();
-			$this->data['message'] = ($this->ion_auth->errors() ? $this->_show_message('error', $this->ion_auth->errors()) : $this->_show_message('error', validation_errors()));
-			$this->data['data'] = $data->row();
-			$this->_render_page('orders/edit', $this->data);
-		} else {
-			if ($this->_valid_csrf_nonce() === FALSE || $data->row()->id != wah_decode(input_post('id'))) show_error($this->lang->line('error_csrf'));
-
-			$input = array(
-				'title' => input_post('title'),
-				'slug' => url_title(input_post('title'), 'dash', true),
-				'content' => $this->input->post('content'),
-				'category' => input_post('category'),
-				'tags' => ($this->input->post('tags') ? implode(', ', $this->input->post('tags')) : ''),
-				'meta_title' => (input_post('meta_title') ? input_post('meta_title') : input_post('title')),
-				'meta_description' => (input_post('meta_description') ? input_post('meta_description') : wordwrap(input_post('content'), 30)),
-			);
-
-			if (input_post('submit') === 'publish') {
-				$input['published'] = 1;
-				$input['published_at'] = ($data->row()->published_at !== null ? $data->row()->published_at : date('Y-m-d H:i:s'));
-			} else {
-				$input['published'] = 0;
-			}
-
-			$input['updated_at'] = date('Y-m-d H:i:s');
-
-			if ($this->orders_model->set($input, ['orders.id' => $data->row()->id])) {
-				$this->_set_message('success', 'This article has been updated successfully.');
-			} else {
-				$this->_set_message('error', 'Failed to update article.');
-			}
-			redirect(base_url('administrator/orders/edit/' . $id), 'refresh');
-		}
+		$this->data['csrf'] = $this->_get_csrf_nonce();
+		$this->data['message'] = ($this->ion_auth->errors() ? $this->_show_message('error', $this->ion_auth->errors()) : $this->_show_message('error', validation_errors()));
+		$this->data['order'] = $order = $data->row();
+		$this->data['variation'] = $variation = $this->variations_model->get(['id' => $order->variation_id])->row();
+		$this->data['product'] = $product = $this->products_model->get(['id' => $variation->product_id])->row();
+		$this->data['buyer'] = $buyer = $this->buyers_model->get(['id' => $order->buyer_id])->row();
+		$this->data['data'] = json_decode($buyer->buyer_data);
+		$this->_render_page('orders/view', $this->data);
 	}
 
 	public function delete($id)

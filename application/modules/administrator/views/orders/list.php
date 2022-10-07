@@ -33,25 +33,27 @@
                       <th width="150">No. Invoice</th>
                       <th>Product</th>
                       <th width="150">Total</th>
-                      <th width="150">Status</th>
+                      <th width="150">Status Payment</th>
+                      <th width="150">Status Transaction</th>
                       <th width="150">Created</th>
                       <th width="100" class="text-center">Action</th>
                   </tr>
               </thead>
               <tbody>
-                  <?php if(!empty($data)): $i=1;foreach ($data as $row): ?>
+                  <?php if(!empty($data)): $i=1;foreach ($data as $row): $buyer = $this->buyers_model->get(['id' => $row->buyer_id])->row(); $buyer_data = json_decode($buyer->buyer_data); ?>
                   <tr>
                       <td><?php echo $i++; ?></td>
                       <td><?php echo $row->no_invoice; ?></td>
-                      <td><?php echo $row->title; ?></td>
-                      <td><?php echo $row->total; ?></td>
-                      <td><?php echo $row->status; ?></td>
+                      <td><?php echo $buyer_data->variation_name . ' - ' . $buyer_data->product; ?></td>
+                      <td><?php echo rupiah($row->total_price); ?></td>
+                      <td><?php echo ($row->status_payment ? '<span class="badge bg-success">Pembayaran Berhasil</span>' : ($row->payment_expired < time() ? '<span class="badge bg-danger text-black">Kedaluwarsa</span>' : '<span class="badge bg-warning text-black">Belum Bayar</span>')); ?></td>
+                      <td><?php echo ($row->status_transaction ? '<span class="badge bg-success">Transaksi Berhasil</span>' : ($row->payment_expired < time() ? '<span class="badge bg-danger text-black">Gagal</span>' : (!empty($row->transaction_id) ? '<span class="badge bg-info text-black">Sedang Diproses</span>' : '<span class="badge bg-warning text-black">Belum Diproses</span>'))); ?></td>
                       <td><?php echo date('d-M-Y, H:i', strtotime($row->created_at)); ?></td>
                       <td class="text-center">
                         <div class="btn-group">
                           <a href="#" class="text-lg text-dark" data-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis"></i></a>
                           <div class="dropdown-menu" role="menu" style="">
-                            <a class="dropdown-item" href="<?php echo base_url('administrator/orders/edit/' . wah_encode($row->id)); ?>">Edit</a>
+                            <a class="dropdown-item" href="<?php echo base_url('administrator/orders/view/' . wah_encode($row->id)); ?>">View</a>
                             <a class="dropdown-item" data-toggle="confirmation" data-title="Are you sure want to delete?"  data-placement="left" href="<?php echo base_url('administrator/orders/delete/' . wah_encode($row->id)); ?>">Delete</a>
                           </div>
                         </div>

@@ -35,4 +35,9 @@ class Buyers_model extends CI_Model
         $this->db->where($where);
         return $this->db->delete('buyers');
     }
+    public function count()
+    {
+        $this->db->group_by('phone');
+        return $this->db->get('buyers')->num_rows();
+    }
 }
