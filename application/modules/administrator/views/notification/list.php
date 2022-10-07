@@ -30,8 +30,9 @@
               <thead>
                   <tr>
                       <th width="5">#</th>
-                      <th width="200">From</th>
-                      <th>Title</th>
+                      <th width="150">From</th>
+                      <th width="150">Title</th>
+                      <th>Message</th>
                       <th width="200">Date</th>
                       <th width="100" class="text-center">Status</th>
                       <th width="100" class="text-center">Action</th>
@@ -43,6 +44,7 @@
                       <td><?php echo $i++; ?></td>
                       <td><?php echo $notif->sender_name; ?></td>
                       <td><?php echo $notif->title; ?></td>
+                      <td><?php echo $notif->message; ?></td>
                       <td><?php echo date('d M Y, H:i:s', strtotime($notif->sent_on)); ?></td>
                       <td class="text-center"><?php echo ($notif->read_on ? '<span class="badge badge-success">Read</span>' : '<span class="badge badge-warning">Unread</span>'); ?></td>
                       <td class="text-center">

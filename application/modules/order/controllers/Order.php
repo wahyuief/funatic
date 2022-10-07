@@ -234,6 +234,7 @@ class Order extends FrontendController {
 						'payment_expired' => $payment_created['data']['expired_time']
 					);
 					$this->orders_model->add($order_input_db);
+					notif_sent(2, 1, $phone, 'Pembelian baru '.$varian->variation_name.' dengan no. invoice '. $no_invoice);
 				}
 			}
 			

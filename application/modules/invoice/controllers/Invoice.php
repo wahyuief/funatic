@@ -40,27 +40,38 @@ class Invoice extends FrontendController {
 	function _confirm_payment($payment_id, $variation_code, $customer_id = false)
 	{
 		$payment = detail_payment($payment_id);
+		$no_invoice = $payment['merchant_ref'];
+		$order = $this->orders_model->get(['no_invoice' => $no_invoice, 'status_payment' => '0'])->row();
+		$buyer = $this->buyers_model->get(['id' => $order->buyer_id])->row();
+		if (!$order) exit(json_encode(['success' => false]));
 		if ($payment['status'] === 'PAID') {
-			$no_invoice = $payment['merchant_ref'];
-			$data = array(
-				'buyer_id' => $no_invoice,
-				'trx_code' => $variation_code,
-				'phone_number' => $phone
-			);
-			if ($customer_id) $data['customer_id'] = $customer_id;
-			$order = order_produk($data);
-			if (is_array($order)) $this->orders_model->set(['transaction_id' => $order['data'][$no_invoice]['idtrx'], 'status_payment' => 1], ['no_invoice' => $no_invoice]);
+			if (empty($order->transaction_id)) {
+				$data = array(
+					'buyer_id' => $no_invoice,
+					'trx_code' => $variation_code,
+					'phone_number' => $buyer->phone
+				);
+				if ($customer_id) $data['customer_id'] = $customer_id;
+				$order = order_produk($data);
+			}
+			if (is_array($order)) {
+				$this->orders_model->set(['transaction_id' => $order['data'][$no_invoice]['idtrx'], 'status_payment' => 1], ['no_invoice' => $no_invoice]);
+				notif_sent(2, 1, $buyer->phone, 'Pembayaran berhasil untuk invoice '. $no_invoice);
+			}
 		}
 	}
 
 	function _confirm_transaction($transaction_id)
 	{
 		$transaction = detail_transaction($transaction_id);
+		$order = $this->orders_model->get(['transaction_id' => $transaction_id])->row();
+		$buyer = $this->buyers_model->get(['id' => $order->buyer_id])->row();
 		if (is_array($transaction)) {
 			$input['status_transaction'] = 0;
 			$input['keterangan'] = $transaction['data'][$transaction_id]['sn'];
 			if ($transaction['data'][$transaction_id]['status'] === 'SUCCESS') $input['status_transaction'] = 1;
 			$this->orders_model->set($input, ['transaction_id' => $transaction_id]);
+			notif_sent(2, 1, $buyer->phone, 'Transaksi berhasil untuk invoice '. $order->no_invoice);
 		}
 	}
 }
