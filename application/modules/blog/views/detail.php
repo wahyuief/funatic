@@ -1,3 +1,30 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "<?php echo base_url($blog->slug) ?>"
+  },
+  "headline": "<?php echo $blog->title ?>",
+  "description": "<?php echo substr(strip_tags($blog->content), 0, 200) ?>",
+  "image": "<?php echo ($blog->featured_image ? base_url('uploads/' . $blog->featured_image) : base_url('assets/funatic/images/funatic.png')) ?>",  
+  "author": {
+    "@type": "Organization",
+    "name": "<?php echo get_option('site_name'); ?>",
+    "url": "<?php echo base_url() ?>"
+  },  
+  "publisher": {
+    "@type": "Organization",
+    "name": "<?php echo get_option('site_name'); ?>",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "<?php echo base_url('assets/funatic/images/funatic.png') ?>"
+    }
+  },
+  "datePublished": "<?php echo date('Y-m-d', strtotime($blog->created_at)) ?>"
+}
+</script>
 <div class="bg-dark m-auto ps-3 pe-3 pt-3 pb-1 text-white">
 	<div class="fs-4 m-0">
 		<span class="bg-semiblack badge">

@@ -31,6 +31,17 @@
     </script>
 </head>
 <body class="bg-black">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "<?php echo get_option('site_name'); ?>",
+        "alternateName": "Funatic",
+        "url": "<?php echo base_url() ?>",
+        "logo": "<?php echo base_url('assets/funatic/images/funatic.png') ?>",
+        "sameAs": "https://www.instagram.com/funaticgamestore/"
+    }
+    </script>
     <div class="container-md mb-3">
         <h1 class="site-name text-center">
             <img src="<?php echo base_url('assets/funatic/images/funatic.png') ?>" alt="funatic" width="200">

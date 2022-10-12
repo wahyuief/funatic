@@ -1,3 +1,23 @@
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org/", 
+  "@type": "Product", 
+  "name": "<?php echo $data->title ?>",
+  "image": "<?php echo base_url('uploads/'.$data->featured_image) ?>",
+  "description": "Jual <?php echo $data->title .' '. $data->category ?> terbaik di Indonesia hanya di <?php echo get_option('site_name'); ?>",
+  "brand": {
+    "@type": "Brand",
+    "name": "<?php echo $data->category ?>"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "5",
+    "bestRating": "5",
+    "worstRating": "1",
+    "ratingCount": "<?php echo count($variations) ?>"
+  }
+}
+</script>
 <div class="bg-dark m-auto ps-3 pe-3 pt-3 pb-1 text-white">
 	<div class="fs-4 m-0">
 		<span class="bg-semiblack badge">
