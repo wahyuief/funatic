@@ -1,42 +1,43 @@
 <?php
 
-define('GAME_APIKEY', '');
-define('GAME_ENDPOINT', 'https://pay.tokomini.net/api/');
+define('GAME_APIKEY', 'dev-fdbbcfa0-495a-11ed-a213-cfbbb6e1a150');
+define('GAME_USERNAME', 'zesefaDbXEMg');
+define('GAME_ENDPOINT', 'https://api.digiflazz.com/v1/');
 
-function pricelist($category = false, $option = false) {
+function pricelist($category = false, $brand = false) {
     $request = new HTTP_Request2();
-    $request->setUrl(GAME_ENDPOINT . 'pricelist');
-    $request->setMethod(HTTP_Request2::METHOD_GET);
+    $request->setUrl(GAME_ENDPOINT . 'price-list');
+    $request->setMethod(HTTP_Request2::METHOD_POST);
     $request->setConfig(array(
-        'follow_redirects' => TRUE,
-        'ssl_verify_peer' => FALSE,
-        'ssl_verify_host' => FALSE
+        'follow_redirects' => TRUE
     ));
     $request->setHeader(array(
-        'Cookie' => 'csrf_cookie=71c8e0bb1e01ec9795299609e88ee996; sid=hitik5rnhc79p8cfqgb5ferteifgdn8k'
+        'Content-Type' => 'application/json'
     ));
+    $reqdata['cmd'] = 'prepaid';
+    $reqdata['username'] = GAME_USERNAME;
+    $reqdata['sign'] = md5(GAME_USERNAME . GAME_APIKEY . 'pricelist');
+    $request->setBody(json_encode($reqdata));
     try {
         $response = $request->send();
         if ($response->getStatus() == 200) {
             $data = json_decode($response->getBody(), TRUE);
-            if ($data['status'] === true) {
-                $pricelist = array();
-                foreach ($data['data'] as $krow => $vrow) {
-                    unset($vrow['product_desc']);
-                    if ($category && $option) {
-                        if ($vrow['product_cat'] === $category && strpos($vrow['product_opt'], $option) !== false) $pricelist[] = $vrow;
-                    } else if ($category && !$option) {
-                        if ($vrow['product_cat'] === $category) {
-                            $optname[] = $vrow['product_opt'];
-                            $pricelist = array_keys(array_count_values($optname));
-                        }
-                    } else {
-                        $catname[] = $vrow['product_cat'];
-                        $pricelist = array_keys(array_count_values($catname));
+            $pricelist = array();
+            foreach ($data['data'] as $krow => $vrow) {
+                unset($vrow['desc']);
+                if ($category && $brand) {
+                    if ($vrow['category'] === $category && strpos($vrow['brand'], $brand) !== false) $pricelist[] = $vrow;
+                } else if ($category && !$brand) {
+                    if ($vrow['category'] === $category) {
+                        $optname[] = $vrow['brand'];
+                        $pricelist = array_keys(array_count_values($optname));
                     }
+                } else {
+                    $catname[] = $vrow['category'];
+                    $pricelist = array_keys(array_count_values($catname));
                 }
-                return json_encode($pricelist);
             }
+            return json_encode($pricelist);
         } else {
             return $response->getStatus() . ' ' . $response->getReasonPhrase();
         }
@@ -45,9 +46,9 @@ function pricelist($category = false, $option = false) {
     }
 }
 
-function detail_transaction($transaction_id) {
+function game_transaction($variation_code, $customer_id, $no_invoice) {
     $request = new HTTP_Request2();
-    $request->setUrl(GAME_ENDPOINT . 'v3');
+    $request->setUrl(GAME_ENDPOINT . 'transaction');
     $request->setMethod(HTTP_Request2::METHOD_POST);
     $request->setConfig(array(
         'follow_redirects' => TRUE
@@ -55,37 +56,12 @@ function detail_transaction($transaction_id) {
     $request->setHeader(array(
         'Content-Type' => 'application/json'
     ));
-    $reqdata['apikey'] = GAME_APIKEY;
-    $reqdata['command'] = 'order';
-    $reqdata['idtrx'] = $transaction_id;
-    $request->setBody(json_encode($reqdata));
-    try {
-        $response = $request->send();
-        if ($response->getStatus() == 200) {
-            return json_decode($response->getBody(), TRUE);
-        }
-        else {
-            return $response->getStatus() . ' ' . $response->getReasonPhrase();
-        }
-    }
-        catch(HTTP_Request2_Exception $e) {
-        return $e->getMessage();
-    }
-}
-
-function order_produk($data) {
-    $request = new HTTP_Request2();
-    $request->setUrl(GAME_ENDPOINT . 'v3');
-    $request->setMethod(HTTP_Request2::METHOD_POST);
-    $request->setConfig(array(
-        'follow_redirects' => TRUE
-    ));
-    $request->setHeader(array(
-        'Content-Type' => 'application/json'
-    ));
-    $reqdata['apikey'] = GAME_APIKEY;
-    $reqdata['command'] = 'order';
-    $reqdata['data'] = array($data);
+    $reqdata['username'] = GAME_APIKEY;
+    $reqdata['buyer_sku_code'] = $variation_code;
+    $reqdata['customer_no'] = $customer_id;
+    $reqdata['ref_id'] = $no_invoice;
+    $reqdata['sign'] = md5(GAME_USERNAME . GAME_APIKEY . $no_invoice);
+    $reqdata['testing'] = true;
     $request->setBody(json_encode($reqdata));
     try {
         $response = $request->send();

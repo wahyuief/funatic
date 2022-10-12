@@ -1,4 +1,4 @@
-<div class="bg-dark m-auto ps-3 pe-3 pt-5 pb-1 text-white">
+<div class="bg-dark m-auto ps-3 pe-3 pt-3 pb-1 text-white">
 	<div class="fs-4 m-0">
 		<span class="bg-semiblack badge">
 			<i class="fas fa-caret-right text-red"></i>
@@ -23,7 +23,7 @@
                 <table class="table text-white mb-4">
                     <tr>
                         <td>No. Invoice</td>
-                        <td><?php echo '#'.$invoice->no_invoice; ?></td>
+                        <td><span>#<?php echo $invoice->no_invoice; ?></span> <button class="badge bg-dark text-default" id="copyme" data-clipboard-text="<?php echo $invoice->no_invoice; ?>"><i class="fas fa-copy"></i></button></td>
                     </tr>
                     <tr>
                         <td>Nama Produk</td>
@@ -35,12 +35,14 @@
                     </tr>
                     <tr>
                         <td>Customer ID</td>
-                        <td><?php $customer_id_field = $product->customer_id_field;echo $data->$customer_id_field; ?></td>
+                        <td><?php $customer_id_field = $data->customer_id_field;echo $data->$customer_id_field; ?></td>
                     </tr>
+                    <?php if ($data->nickname): ?>
                     <tr>
                         <td>Customer Name</td>
                         <td><?php echo $data->nickname; ?></td>
                     </tr>
+                    <?php endif; ?>
                     <tr>
                         <td>Metode Pembayaran</td>
                         <td><?php echo $invoice->payment_name; ?></td>
@@ -53,7 +55,7 @@
                     <?php else: ?>
                     <tr>
                         <td>Kode Pembayaran</td>
-                        <td><?php echo $invoice->pay_code; ?></td>
+                        <td><span><?php echo $invoice->pay_code; ?></span> <button class="badge bg-dark text-default" id="copyme" data-clipboard-text="<?php echo $invoice->pay_code; ?>"><i class="fas fa-copy"></i></td>
                     </tr>
                     <?php endif;endif; ?>
                     <tr>
@@ -66,15 +68,21 @@
                     </tr>
                     <tr>
                         <td>Total Tagihan</td>
-                        <td><?php echo rupiah($invoice->total_price); ?></td>
+                        <td><span><?php echo rupiah($invoice->total_price); ?></span> <button class="badge bg-dark text-default" id="copyme" data-clipboard-text="<?php echo rupiah($invoice->total_price, ''); ?>"><i class="fas fa-copy"></i></td>
                     </tr>
+                    <?php if ($invoice->keterangan): ?>
+                    <tr>
+                        <td>Keterangan</td>
+                        <td><?php echo $invoice->keterangan; ?></td>
+                    </tr>
+                    <?php endif; ?>
                 </table>
                 <?php if($invoice->payment_expired > time()): ?>
                 <?php if(!empty($invoice->pay_url)): ?>
                 <div class="text-center mb-4">
                     <a href="<?php echo $invoice->pay_url; ?>" class="btn w-100 btn-warning"><i class="fas fa-paper-plane"></i> Lanjutkan Pembayaran</a>
                 </div>
-                <?php endif;$instructions = instruction($data->payment, $invoice->pay_code, (int)$invoice->total_price);if(is_array($instructions)): ?>
+                <?php endif; if(!$invoice->status_payment): $instructions = instruction($data->payment, $invoice->pay_code, (int)$invoice->total_price);if(is_array($instructions)): ?>
                 <div class="bg-dark p-3 rounded">
                     <h4 class="fs-5">Cara Pembayaran</h4>
                     <div class="accordion accordion-dark" id="instruksipembayaran">
@@ -98,9 +106,11 @@
                         <?php endforeach; ?>
                     </div>
                 </div>
-                <?php endif;endif; ?>
+                <?php endif;endif;endif; ?>
             </div>
         </div>
     </div>
 </div>
-<?php if(!$invoice->status_payment && $invoice->payment_expired > time()): ?><script>setTimeout(() => {location.reload()}, 30000);</script><?php else: ?><script>setTimeout(() => {location.reload()}, 60000);</script><?php endif; ?>
+<script>new ClipboardJS('#copyme').on('success', function(e) {
+    alert('Copied!');
+});</script>

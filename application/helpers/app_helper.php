@@ -49,8 +49,8 @@ function wah_decode($value) {
     return $decodedstr[0];
 }
 
-function rupiah($value) {
-	return "Rp" . number_format($value, 0, ',', '.');
+function rupiah($value, $prefix = 'Rp') {
+	return $prefix . number_format($value, 0, ',', '.');
 }
 
 function input_get($value) {

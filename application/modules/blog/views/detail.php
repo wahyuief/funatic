@@ -1,4 +1,4 @@
-<div class="bg-dark m-auto ps-3 pe-3 pt-5 pb-1 text-white">
+<div class="bg-dark m-auto ps-3 pe-3 pt-3 pb-1 text-white">
 	<div class="fs-4 m-0">
 		<span class="bg-semiblack badge">
 			<i class="fas fa-caret-right text-red"></i>

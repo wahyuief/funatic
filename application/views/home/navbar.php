@@ -18,9 +18,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<?php echo base_url('contact'); ?>"><i class="fas fa-envelope"></i> Contact</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?php echo base_url(); ?>"><i class="fas fa-cog"></i> Tools</a>
-                </li>
             </ul>
         </div>
     </div>

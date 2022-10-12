@@ -72,13 +72,13 @@
                         }
                         data.forEach(data => {
                               $('#databody').append(
-                                    `<tr id="`+data.product_code+`">
-                                          <td><input type="text" name="variation_code[]" id="variation_code" class="form-control" value="`+data.product_code+`" required readonly></td>
+                                    `<tr id="`+data.buyer_sku_code+`">
+                                          <td><input type="text" name="variation_code[]" id="variation_code" class="form-control" value="`+data.buyer_sku_code+`" required readonly></td>
                                           <td><input type="text" name="variation_name[]" id="variation_name" class="form-control" value="`+data.product_name+`" required></td>
-                                          <td><input type="number" name="variation_price[]" id="variation_price" class="form-control" value="`+(data.product_price ? data.product_price : data.product_regular_price)+`" readonly required></td>
+                                          <td><input type="number" name="variation_price[]" id="variation_price" class="form-control" value="`+data.price+`" readonly required></td>
                                           <td><input type="number" name="additional_price[]" id="additional_price" class="form-control" value="0"></td>
                                           <td><select name="status[]" id="status" class="form-control" required><option value="1">Active</option><option value="0">Inactive</option></select></td>
-                                          <td><a href="javascript:void(0);" onclick="removeData('`+data.product_code+`')" style="line-height:2.4;"><i class="fas fa-times"></i></a></td>
+                                          <td><a href="javascript:void(0);" onclick="removeData('`+data.buyer_sku_code+`')" style="line-height:2.4;"><i class="fas fa-times"></i></a></td>
                                           <td class="d-none"><input type="hidden" name="fromwhere[]" id="fromwhere" class="form-control" value="thirdparty"></td>
                                     </tr>`
                               )

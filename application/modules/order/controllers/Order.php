@@ -52,73 +52,73 @@ class Order extends FrontendController {
 				return;
 			}
 
-			if (strpos($product->category, 'Mobile Legends') !== false && !empty($customer_id_field)) {
-				$gameid = gameid_validator($customer_id, 'mobile-legend');
-				if ($gameid->code !== '200') {
-					$output = array(
-						'status' => false,
-						'message' => 'ID tidak ditemukan',
-						'csrf' => array(
-							'name' => $this->security->get_csrf_token_name(),
-							'value' => $this->security->get_csrf_hash()
-						)
-					);
-					echo json_encode($output);
-					return;
-				}
-				$nickname = $gameid->result;
-			}
+			// if (strpos($product->category, 'Mobile Legends') !== false && !empty($customer_id_field)) {
+			// 	$gameid = gameid_validator($customer_id, 'mobile-legend');
+			// 	if ($gameid->code !== '200') {
+			// 		$output = array(
+			// 			'status' => false,
+			// 			'message' => 'ID tidak ditemukan',
+			// 			'csrf' => array(
+			// 				'name' => $this->security->get_csrf_token_name(),
+			// 				'value' => $this->security->get_csrf_hash()
+			// 			)
+			// 		);
+			// 		echo json_encode($output);
+			// 		return;
+			// 	}
+			// 	$nickname = $gameid->result;
+			// }
 
-			if (strpos($product->category, 'Free Fire') !== false && !empty($customer_id_field)) {
-				$gameid = gameid_validator($customer_id, 'free-fire');
-				if ($gameid->code !== '200') {
-					$output = array(
-						'status' => false,
-						'message' => 'ID tidak ditemukan',
-						'csrf' => array(
-							'name' => $this->security->get_csrf_token_name(),
-							'value' => $this->security->get_csrf_hash()
-						)
-					);
-					echo json_encode($output);
-					return;
-				}
-				$nickname = $gameid->result;
-			}
+			// if (strpos($product->category, 'Free Fire') !== false && !empty($customer_id_field)) {
+			// 	$gameid = gameid_validator($customer_id, 'free-fire');
+			// 	if ($gameid->code !== '200') {
+			// 		$output = array(
+			// 			'status' => false,
+			// 			'message' => 'ID tidak ditemukan',
+			// 			'csrf' => array(
+			// 				'name' => $this->security->get_csrf_token_name(),
+			// 				'value' => $this->security->get_csrf_hash()
+			// 			)
+			// 		);
+			// 		echo json_encode($output);
+			// 		return;
+			// 	}
+			// 	$nickname = $gameid->result;
+			// }
 
-			if (strpos($product->category, 'Call of Duty') !== false && !empty($customer_id_field)) {
-				$gameid = gameid_validator($customer_id, 'call-of-duty-mobile');
-				if ($gameid->code !== '200') {
-					$output = array(
-						'status' => false,
-						'message' => 'ID tidak ditemukan',
-						'csrf' => array(
-							'name' => $this->security->get_csrf_token_name(),
-							'value' => $this->security->get_csrf_hash()
-						)
-					);
-					echo json_encode($output);
-					return;
-				}
-				$nickname = $gameid->result;
-			}
+			// if (strpos($product->category, 'Call of Duty') !== false && !empty($customer_id_field)) {
+			// 	$gameid = gameid_validator($customer_id, 'call-of-duty-mobile');
+			// 	if ($gameid->code !== '200') {
+			// 		$output = array(
+			// 			'status' => false,
+			// 			'message' => 'ID tidak ditemukan',
+			// 			'csrf' => array(
+			// 				'name' => $this->security->get_csrf_token_name(),
+			// 				'value' => $this->security->get_csrf_hash()
+			// 			)
+			// 		);
+			// 		echo json_encode($output);
+			// 		return;
+			// 	}
+			// 	$nickname = $gameid->result;
+			// }
 
-			if (strpos($product->category, 'Higgs Domino') !== false && !empty($customer_id_field)) {
-				$gameid = gameid_validator($customer_id, 'higgs-domino');
-				if ($gameid->code !== '200') {
-					$output = array(
-						'status' => false,
-						'message' => 'ID tidak ditemukan',
-						'csrf' => array(
-							'name' => $this->security->get_csrf_token_name(),
-							'value' => $this->security->get_csrf_hash()
-						)
-					);
-					echo json_encode($output);
-					return;
-				}
-				$nickname = $gameid->result;
-			}
+			// if (strpos($product->category, 'Higgs Domino') !== false && !empty($customer_id_field)) {
+			// 	$gameid = gameid_validator($customer_id, 'higgs-domino');
+			// 	if ($gameid->code !== '200') {
+			// 		$output = array(
+			// 			'status' => false,
+			// 			'message' => 'ID tidak ditemukan',
+			// 			'csrf' => array(
+			// 				'name' => $this->security->get_csrf_token_name(),
+			// 				'value' => $this->security->get_csrf_hash()
+			// 			)
+			// 		);
+			// 		echo json_encode($output);
+			// 		return;
+			// 	}
+			// 	$nickname = $gameid->result;
+			// }
 
 			if ($product->quantity_active > 0) {
 				$output = array(
@@ -186,13 +186,16 @@ class Order extends FrontendController {
 			unset($buyer_data['varian']);
 			unset($buyer_data['funatic_csrf']);
 			$buyer_data['no_invoice'] = $no_invoice;
-			$buyer_data['nickname'] = $nickname;
+			// $buyer_data['nickname'] = $nickname;
 			$buyer_data['product'] = $product->title;
 			$buyer_data['category'] = $product->category;
 			$buyer_data['variation_code'] = $varian->variation_code;
 			$buyer_data['variation_name'] = $varian->variation_name;
 			$buyer_data['totalprice'] = $totalprice;
 			$buyer_data['ip_address'] = get_ip_client();
+			$buyer_data['quantity_field'] = $product->quantity_field;
+			$buyer_data['customer_id_field'] = $product->customer_id_field;
+			$buyer_data['phone_field'] = $product->phone_field;
 			$buyer_inputdata = array(
 				'phone' => $phone,
 				'buyer_data' => json_encode($buyer_data)

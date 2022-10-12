@@ -35,6 +35,7 @@
                       <th>Name</th>
                       <th width="150">Price</th>
                       <th width="150">Price+</th>
+                      <th width="150">Total Price</th>
                       <th style="text-align:center;" width="150">Created</th>
                       <th width="100" class="text-center">Action</th>
                   </tr>
@@ -47,6 +48,7 @@
                       <td><?php echo $row->variation_name; ?></td>
                       <td><?php echo rupiah($row->variation_price); ?></td>
                       <td><?php echo rupiah($row->additional_price); ?></td>
+                      <td><?php echo rupiah($row->variation_price+$row->additional_price); ?></td>
                       <td style="text-align:center;"><?php echo date('d-M-Y, H:i', strtotime($row->created_at)); ?></td>
                       <td class="text-center">
                         <div class="btn-group">

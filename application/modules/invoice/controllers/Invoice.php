@@ -22,56 +22,11 @@ class Invoice extends FrontendController {
 			$invoice = $this->orders_model->get(['no_invoice' => $no_invoice]);
 			if (!$invoice->num_rows()) show_404();
 			$this->data['invoice'] = $invoice->row();
-			$this->data['variation'] = $variation = $this->variations_model->get(['id' => $this->data['invoice']->variation_id])->row();
-			$this->data['product'] = $product = $this->products_model->get(['id' => $variation->product_id])->row();
 			$this->data['buyer'] = $buyer = $this->buyers_model->get(['id' => $this->data['invoice']->buyer_id])->row();
 			$this->data['data'] = $data = json_decode($buyer->buyer_data);
-			$customer_id_field = $product->customer_id_field;
-			$customer_id = false;
-			if ($customer_id_field) $customer_id = $data->$customer_id_field;
-			if (!$this->data['invoice']->status_payment) $this->_confirm_payment($this->data['invoice']->payment_id, $variation->variation_code, $customer_id);
-			if (!$this->data['invoice']->status_transaction) $this->_confirm_transaction($this->data['invoice']->transaction_id);
 			$this->_render_page('invoice_data', $this->data);
 		} else {
 			$this->_render_page('invoice_form', $this->data);
-		}
-	}
-
-	function _confirm_payment($payment_id, $variation_code, $customer_id = false)
-	{
-		$payment = detail_payment($payment_id);
-		$no_invoice = $payment['merchant_ref'];
-		$order = $this->orders_model->get(['no_invoice' => $no_invoice, 'status_payment' => '0'])->row();
-		$buyer = $this->buyers_model->get(['id' => $order->buyer_id])->row();
-		if (!$order) exit(json_encode(['success' => false]));
-		if ($payment['status'] === 'PAID') {
-			if (empty($order->transaction_id)) {
-				$data = array(
-					'buyer_id' => $no_invoice,
-					'trx_code' => $variation_code,
-					'phone_number' => $buyer->phone
-				);
-				if ($customer_id) $data['customer_id'] = $customer_id;
-				$order = order_produk($data);
-			}
-			if (is_array($order)) {
-				$this->orders_model->set(['transaction_id' => $order['data'][$no_invoice]['idtrx'], 'status_payment' => 1], ['no_invoice' => $no_invoice]);
-				notif_sent(2, 1, $buyer->phone, 'Pembayaran berhasil untuk invoice '. $no_invoice);
-			}
-		}
-	}
-
-	function _confirm_transaction($transaction_id)
-	{
-		$transaction = detail_transaction($transaction_id);
-		$order = $this->orders_model->get(['transaction_id' => $transaction_id])->row();
-		$buyer = $this->buyers_model->get(['id' => $order->buyer_id])->row();
-		if (is_array($transaction)) {
-			$input['status_transaction'] = 0;
-			$input['keterangan'] = $transaction['data'][$transaction_id]['sn'];
-			if ($transaction['data'][$transaction_id]['status'] === 'SUCCESS') $input['status_transaction'] = 1;
-			$this->orders_model->set($input, ['transaction_id' => $transaction_id]);
-			notif_sent(2, 1, $buyer->phone, 'Transaksi berhasil untuk invoice '. $order->no_invoice);
 		}
 	}
 }
