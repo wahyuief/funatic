@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Payment extends FrontendController {
+class Callback extends FrontendController {
 
 	public function __construct()
     {
