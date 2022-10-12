@@ -10,13 +10,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <meta name="author" content="Wahyu Arief">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
     <title><?php echo $heading; ?> - Funatic Game</title>
-    <link rel="stylesheet" href="https://funatic.test/assets/funatic/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://funatic.test/assets/funatic/css/styles.css">
+    <link rel="stylesheet" href="https://funatic.id/assets/funatic/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://funatic.id/assets/funatic/css/styles.css">
 </head>
 <body class="bg-black">
     <div class="container-md">
         <div class="site-name text-center">
-            <img src="https://funatic.test/assets/funatic/images/funatic.png" alt="funatic" width="200">
+            <img src="https://funatic.id/assets/funatic/images/funatic.png" alt="funatic" width="200">
         </div>
         <div class="main-wrapper">
 
@@ -31,6 +31,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<small>Copyright &copy; 2022 Funatic Game Store, All Rights Reserved.</small>
 		</footer>
 	</div>
-    <script src="https://funatic.test/assets/funatic/js/bootstrap.bundle.min.js"></script>
+    <script src="https://funatic.id/assets/funatic/js/bootstrap.bundle.min.js"></script>
     </body>
 </html>

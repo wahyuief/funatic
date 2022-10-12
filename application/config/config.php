@@ -455,7 +455,10 @@ $config['csrf_token_name'] = 'c4345079-4a24-4aa8-b2d6-3b67a5857fd3';
 $config['csrf_cookie_name'] = 'f167e3bd-6780-4a3c-a282-7f594788449b';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = TRUE;
-$config['csrf_exclude_uris'] = array();
+$config['csrf_exclude_uris'] = array(
+    'callback/payment',
+    'callback/transaction'
+);
 
 /*
 |--------------------------------------------------------------------------
