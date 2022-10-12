@@ -56,7 +56,7 @@ function game_transaction($variation_code, $customer_id, $no_invoice) {
     $request->setHeader(array(
         'Content-Type' => 'application/json'
     ));
-    $reqdata['username'] = GAME_APIKEY;
+    $reqdata['username'] = GAME_USERNAME;
     $reqdata['buyer_sku_code'] = $variation_code;
     $reqdata['customer_no'] = $customer_id;
     $reqdata['ref_id'] = $no_invoice;

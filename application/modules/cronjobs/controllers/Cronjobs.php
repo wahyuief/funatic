@@ -26,7 +26,8 @@ class Cronjobs extends FrontendController {
 		if (input_get('key') === '8au29u9x810321m910xm21') {
 			$datas = $this->orders_model->get(['status_payment' => '1', 'status_transaction' => '0'])->result();
 			foreach ($datas as $data) {
-				$buyer_data = $this->buyers_model->get(['id' => $data->buyer_id])->row();
+				$buyer = $this->buyers_model->get(['id' => $data->buyer_id])->row();
+				$buyer_data = json_decode($buyer->buyer_data);
 				$customer_id_field = $buyer_data->customer_id_field;
 				$transaction = game_transaction($buyer_data->variation_code, $buyer_data->$customer_id_field, $buyer_data->no_invoice)['data'];
 				$status_transaction = ($transaction->status === 'Sukses' ? '1' : '0');
