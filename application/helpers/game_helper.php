@@ -79,7 +79,7 @@ function game_transaction($variation_code, $customer_id, $no_invoice) {
 
 function gameid_validator($player_id, $slug) {
     $request = new HTTP_Request2();
-    $request->setUrl('https://apivouchergame.com/api/check-game-id/' . $slug);
+    $request->setUrl('https://topup-center.shoplay365.com/shareit-topup-center/order/check-uid');
     $request->setMethod(HTTP_Request2::METHOD_POST);
     $request->setConfig(array(
         'follow_redirects' => TRUE
@@ -92,7 +92,7 @@ function gameid_validator($player_id, $slug) {
     if ($slug === 'mobile-legend') {
         $zoneid = (int)substr($player_id, -4);
         $userid = (int)str_replace($zoneid, '', $player_id);
-        $request->setBody('{"uid": "'.$userid.'", "zid": "'.$zoneid.'"}');
+        $request->setBody('{"activityId":"","appAlias":"mlbb_diamonds","appId":"APP20210608084718702","country":"id","goodsId":"G20210608122330611","jmsId":"","language":"en","payTypeId":294904,"platformName":"","roleName":"","serverId":'.$zoneid.',"token":"5416a9be7545418a82b32a27c4d3c9ea","userId":'.$userid.'}');
     } else {
         $request->setBody('{"uid": "'.$player_id.'"}');
     }

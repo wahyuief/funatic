@@ -52,22 +52,22 @@ class Order extends FrontendController {
 				return;
 			}
 
-			// if (strpos($product->category, 'Mobile Legends') !== false && !empty($customer_id_field)) {
-			// 	$gameid = gameid_validator($customer_id, 'mobile-legend');
-			// 	if ($gameid->code !== '200') {
-			// 		$output = array(
-			// 			'status' => false,
-			// 			'message' => 'ID tidak ditemukan',
-			// 			'csrf' => array(
-			// 				'name' => $this->security->get_csrf_token_name(),
-			// 				'value' => $this->security->get_csrf_hash()
-			// 			)
-			// 		);
-			// 		echo json_encode($output);
-			// 		return;
-			// 	}
-			// 	$nickname = $gameid->result;
-			// }
+			if (strpos($product->category, 'Mobile Legends') !== false && !empty($customer_id_field)) {
+				$gameid = gameid_validator($customer_id, 'mobile-legend');
+				if ($gameid->code !== '200') {
+					$output = array(
+						'status' => false,
+						'message' => 'ID tidak ditemukan',
+						'csrf' => array(
+							'name' => $this->security->get_csrf_token_name(),
+							'value' => $this->security->get_csrf_hash()
+						)
+					);
+					echo json_encode($output);
+					return;
+				}
+				$nickname = $gameid->data->nickName;
+			}
 
 			// if (strpos($product->category, 'Free Fire') !== false && !empty($customer_id_field)) {
 			// 	$gameid = gameid_validator($customer_id, 'free-fire');
@@ -186,7 +186,7 @@ class Order extends FrontendController {
 			unset($buyer_data['varian']);
 			unset($buyer_data['funatic_csrf']);
 			$buyer_data['no_invoice'] = $no_invoice;
-			// $buyer_data['nickname'] = $nickname;
+			$buyer_data['nickname'] = $nickname;
 			$buyer_data['product'] = $product->title;
 			$buyer_data['category'] = $product->category;
 			$buyer_data['variation_code'] = $varian->variation_code;
